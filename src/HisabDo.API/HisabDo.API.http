@@ -1,0 +1,37 @@
+@HisabDo.API_HostAddress = http://localhost:5181
+
+GET {{HisabDo.API_HostAddress}}/api/v1/customers
+Accept: application/json
+
+###
+
+POST {{HisabDo.API_HostAddress}}/api/v1/customers
+Content-Type: application/json
+
+{
+  "name": "Ahmed Khan",
+  "phone": "03123456789",
+  "email": "ahmed@example.com",
+  "notes": "Shop owner"
+}
+
+###
+
+GET {{HisabDo.API_HostAddress}}/api/v1/transactions
+Accept: application/json
+
+###
+
+POST {{HisabDo.API_HostAddress}}/api/v1/transactions
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "categoryId": 1,
+  "type": 1,
+  "amount": 5000,
+  "note": "Credit sale",
+  "transactionDate": "2026-08-08T10:00:00Z"
+}
+
+###

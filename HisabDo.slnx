@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HisabDo.API/HisabDo.API.csproj" />
+    <Project Path="src/HisabDo.Application/HisabDo.Application.csproj" />
+    <Project Path="src/HisabDo.Domain/HisabDo.Domain.csproj" />
+    <Project Path="src/HisabDo.Infrastructure/HisabDo.Infrastructure.csproj" />
+  </Folder>
+</Solution>
