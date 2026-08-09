@@ -37,7 +37,7 @@ dotnet ef database update --project src/HisabDo.Infrastructure --startup-project
 dotnet run --project src/HisabDo.API
 ```
 
-Open `http://localhost:5xxx/swagger` to test.
+Open `http://localhost:5181/swagger` to test (the API opens Swagger automatically in the browser).
 
 ## Solution Structure (Clean Architecture)
 
