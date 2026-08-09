@@ -64,7 +64,7 @@ Infrastructure -> Application (implements repository interfaces)
 ## Entities (Domain)
 
 - `User` - account owner (seeded demo user)
-- `Customer` - Khata partner (logha lena / dena)
+- `Customer` - Khata partner
 - `Category` - groups transactions (seeded: Sales, Purchase, Rent, Food, Transport, Salary, Others)
 - `Transaction` - the core entity (Type: 1 = Receivable, 2 = Payable)
 - `Setting` - user preferences
@@ -115,7 +115,7 @@ POST /api/v1/transactions
 }
 ```
 
-`type`: 1 = Receivable (logha lena), 2 = Payable (logha dena).
+`type`: 1 = Receivable, 2 = Payable.
 
 ### Error handling
 

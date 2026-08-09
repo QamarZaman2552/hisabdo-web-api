@@ -80,6 +80,6 @@ Category 1 --- * Transaction     (one category has many transactions)
 ## Notes
 
 - Every business table has `UserId` so each user only sees their own data.
-- `Type` in Transactions: 1 = Receivable (logha lena), 2 = Payable (logha dena).
+- `Type` in Transactions: 1 = Receivable, 2 = Payable.
 - Soft delete: `IsDeleted` flag instead of hard delete.
 - Reports are calculated from Transactions, not stored.
