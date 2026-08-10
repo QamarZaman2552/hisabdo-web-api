@@ -190,3 +190,27 @@ All errors return a consistent JSON response:
 ![SQL Server 4](screenshots/Day-9-Task/SqlServer_Day_9/Screenshot%202026-08-09%20134853.png)
 ![SQL Server 5](screenshots/Day-9-Task/SqlServer_Day_9/Screenshot%202026-08-09%20134903.png)
 
+### Swagger - Day 10
+
+![Swagger 1](screenshots/Day-10-Task/Swagger_Day_10/Screenshot%202026-08-10%20125722.png)
+![Swagger 2](screenshots/Day-10-Task/Swagger_Day_10/Screenshot%202026-08-10%20125746.png)
+![Swagger 3](screenshots/Day-10-Task/Swagger_Day_10/Screenshot%202026-08-10%20130148.png)
+![Swagger 4](screenshots/Day-10-Task/Swagger_Day_10/Screenshot%202026-08-10%20130212.png)
+![Swagger 5](screenshots/Day-10-Task/Swagger_Day_10/Screenshot%202026-08-10%20130316.png)
+![Swagger 6](screenshots/Day-10-Task/Swagger_Day_10/Screenshot%202026-08-10%20130347.png)
+
+### Postman - Day 10
+
+![Postman 1](screenshots/Day-10-Task/Postman_Day_10/Screenshot%202026-08-10%20130506.png)
+![Postman 2](screenshots/Day-10-Task/Postman_Day_10/Screenshot%202026-08-10%20130627.png)
+![Postman 3](screenshots/Day-10-Task/Postman_Day_10/Screenshot%202026-08-10%20130657.png)
+![Postman 4](screenshots/Day-10-Task/Postman_Day_10/Screenshot%202026-08-10%20130858.png)
+![Postman 5](screenshots/Day-10-Task/Postman_Day_10/Screenshot%202026-08-10%20131544.png)
+![Postman 6](screenshots/Day-10-Task/Postman_Day_10/Screenshot%202026-08-10%20131601.png)
+![Postman 7](screenshots/Day-10-Task/Postman_Day_10/Screenshot%202026-08-10%20131620.png)
+
+### SQL Server - Day 10
+
+![SQL Server 1](screenshots/Day-10-Task/SqlServer_Day_10/Screenshot%202026-08-10%20131939.png)
+![SQL Server 2](screenshots/Day-10-Task/SqlServer_Day_10/Screenshot%202026-08-10%20131953.png)
+
