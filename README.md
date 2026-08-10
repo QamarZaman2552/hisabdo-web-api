@@ -1,6 +1,6 @@
 # HisabDo Web API - Capstone Project
 
-**Day 9 - HisabDo Internship**
+**Day 10 - HisabDo Internship**
 
 A .NET-based web application that mirrors the HisabDo mobile app (Khata/Ledger application).
 
@@ -13,7 +13,7 @@ ASP.NET Core Web API with Clean Architecture, EF Core, SQL Server and working CR
 
 ---
 
-# Day 9 - Project Implementation
+# Day 10 - Categories Module
 
 ## How to Run
 
@@ -71,9 +71,9 @@ Infrastructure -> Application (implements repository interfaces)
 
 All business tables have `UserId` and use soft delete (`IsDeleted`).
 
-## Working CRUD Modules (Day 9)
+## Working CRUD Modules
 
-### Customers
+### Customers (Day 9)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -83,7 +83,7 @@ All business tables have `UserId` and use soft delete (`IsDeleted`).
 | PUT | /api/v1/customers/{id} | Update customer |
 | DELETE | /api/v1/customers/{id} | Delete customer (soft) |
 
-### Transactions
+### Transactions (Day 9)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -92,6 +92,22 @@ All business tables have `UserId` and use soft delete (`IsDeleted`).
 | POST | /api/v1/transactions | Add Receivable/Payable |
 | PUT | /api/v1/transactions/{id} | Update transaction |
 | DELETE | /api/v1/transactions/{id} | Delete transaction (soft) |
+
+### Categories (Day 10)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/v1/categories | List all categories |
+| GET | /api/v1/categories/{id} | Get category by ID |
+| POST | /api/v1/categories | Add category |
+| PUT | /api/v1/categories/{id} | Update category |
+| DELETE | /api/v1/categories/{id} | Delete category (soft) |
+
+Category rules:
+- Name is required (2-50 characters) and must be unique per user (case-insensitive).
+- Seeded default categories (Sales, Purchase, Rent, Food, Transport, Salary, Others) cannot be updated or deleted.
+- A category that is used by transactions cannot be deleted.
+- HTTP status codes: 200 OK, 201 Created, 204 No Content, 400 Bad Request (validation / rules), 404 Not Found.
 
 ### Sample requests
 
@@ -112,6 +128,11 @@ POST /api/v1/transactions
   "amount": 5000,
   "note": "Credit sale",
   "transactionDate": "2026-08-08T10:00:00Z"
+}
+
+POST /api/v1/categories
+{
+  "name": "Electricity"
 }
 ```
 

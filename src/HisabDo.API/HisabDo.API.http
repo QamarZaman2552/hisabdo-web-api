@@ -35,3 +35,17 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{HisabDo.API_HostAddress}}/api/v1/categories
+Accept: application/json
+
+###
+
+POST {{HisabDo.API_HostAddress}}/api/v1/categories
+Content-Type: application/json
+
+{
+  "name": "Electricity"
+}
+
+###
