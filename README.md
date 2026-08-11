@@ -221,3 +221,38 @@ All errors return a consistent JSON response:
 ![SQL Server 1](screenshots/Day-10-Task/SqlServer_Day_10/Screenshot%202026-08-10%20131939.png)
 ![SQL Server 2](screenshots/Day-10-Task/SqlServer_Day_10/Screenshot%202026-08-10%20131953.png)
 
+### Swagger - Day 11
+
+![Swagger 1](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20142952.png)
+![Swagger 2](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20143016.png)
+![Swagger 3](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20143818.png)
+![Swagger 4](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20143835.png)
+![Swagger 5](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20144109.png)
+![Swagger 6](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20144148.png)
+![Swagger 7](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20144312.png)
+![Swagger 8](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20144325.png)
+![Swagger 9](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20144452.png)
+![Swagger 10](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20144513.png)
+![Swagger 11](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20145051.png)
+![Swagger 12](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20145058.png)
+![Swagger 13](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20150126.png)
+![Swagger 14](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20150206.png)
+![Swagger 15](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20150259.png)
+![Swagger 16](screenshots/Day-11-Task/Swagger_Day_11/Screenshot%202026-08-11%20150456.png)
+
+### Postman - Day 11
+
+![Postman 1](screenshots/Day-11-Task/Postman_Day_11/Screenshot%202026-08-11%20150933.png)
+![Postman 2](screenshots/Day-11-Task/Postman_Day_11/Screenshot%202026-08-11%20151721.png)
+![Postman 3](screenshots/Day-11-Task/Postman_Day_11/Screenshot%202026-08-11%20151752.png)
+![Postman 4](screenshots/Day-11-Task/Postman_Day_11/Screenshot%202026-08-11%20151819.png)
+![Postman 5](screenshots/Day-11-Task/Postman_Day_11/Screenshot%202026-08-11%20153553.png)
+![Postman 6](screenshots/Day-11-Task/Postman_Day_11/Screenshot%202026-08-11%20153951.png)
+![Postman 7](screenshots/Day-11-Task/Postman_Day_11/Screenshot%202026-08-11%20154859.png)
+![Postman 8](screenshots/Day-11-Task/Postman_Day_11/Screenshot%202026-08-11%20154918.png)
+![Postman 9](screenshots/Day-11-Task/Postman_Day_11/Screenshot%202026-08-11%20154946.png)
+
+### SQL Server - Day 11
+
+![SQL Server 1](screenshots/Day-11-Task/SqlServer_Day_11/Screenshot%202026-08-11%20155531.png)
+
