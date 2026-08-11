@@ -1,6 +1,6 @@
 # HisabDo Web API - Capstone Project
 
-**Day 10 - HisabDo Internship**
+**Day 11 - HisabDo Internship**
 
 A .NET-based web application that mirrors the HisabDo mobile app (Khata/Ledger application).
 
@@ -83,15 +83,22 @@ All business tables have `UserId` and use soft delete (`IsDeleted`).
 | PUT | /api/v1/customers/{id} | Update customer |
 | DELETE | /api/v1/customers/{id} | Delete customer (soft) |
 
-### Transactions (Day 9)
+### Transactions (Day 9 + Day 11)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/v1/transactions | List all transactions (with customer + category names) |
+| GET | /api/v1/transactions | List transactions with filters (type, customerId, categoryId, fromDate, toDate) |
+| GET | /api/v1/categories/{id}/transactions | List transactions of one category (relationship endpoint) |
 | GET | /api/v1/transactions/{id} | Get transaction by ID |
 | POST | /api/v1/transactions | Add Receivable/Payable |
 | PUT | /api/v1/transactions/{id} | Update transaction |
 | DELETE | /api/v1/transactions/{id} | Delete transaction (soft) |
+
+Day 11 - the Transactions module was completed as the second core module with the Category relation:
+- `Category` (first module) has one-to-many relationship with `Transaction` (second module): one category has many transactions.
+- Database relationship: `Transactions.CategoryId` foreign key with `DeleteBehavior.Restrict` (category used by transactions cannot be deleted).
+- New relationship endpoint: `GET /api/v1/categories/{id}/transactions`.
+- New query filters on the list API: `type` (1 = Receivable, 2 = Payable), `customerId`, `categoryId`, `fromDate`, `toDate`.
 
 ### Categories (Day 10)
 

@@ -11,9 +11,15 @@ public class TransactionsController(ITransactionService transactionService) : Co
     private const int CurrentUserId = 1;
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TransactionDto>>> GetAllTransactions()
+    public async Task<ActionResult<IEnumerable<TransactionDto>>> GetAllTransactions([FromQuery] TransactionFilterDto filter)
     {
-        return Ok(await transactionService.GetAllAsync(CurrentUserId));
+        return Ok(await transactionService.GetAllAsync(CurrentUserId, filter));
+    }
+
+    [HttpGet("~/api/v1/categories/{categoryId:int}/transactions")]
+    public async Task<ActionResult<IEnumerable<TransactionDto>>> GetTransactionsByCategory(int categoryId)
+    {
+        return Ok(await transactionService.GetByCategoryAsync(CurrentUserId, categoryId));
     }
 
     [HttpGet("{id:int}")]

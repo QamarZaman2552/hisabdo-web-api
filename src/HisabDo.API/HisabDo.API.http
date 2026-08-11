@@ -22,6 +22,16 @@ Accept: application/json
 
 ###
 
+GET {{HisabDo.API_HostAddress}}/api/v1/transactions?type=1&categoryId=1&fromDate=2026-08-01&toDate=2026-08-31
+Accept: application/json
+
+###
+
+GET {{HisabDo.API_HostAddress}}/api/v1/categories/1/transactions
+Accept: application/json
+
+###
+
 POST {{HisabDo.API_HostAddress}}/api/v1/transactions
 Content-Type: application/json
 

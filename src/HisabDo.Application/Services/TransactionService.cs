@@ -6,9 +6,20 @@ namespace HisabDo.Application.Services;
 
 public class TransactionService(ITransactionRepository repository) : ITransactionService
 {
-    public async Task<IEnumerable<TransactionDto>> GetAllAsync(int userId)
+    public async Task<IEnumerable<TransactionDto>> GetAllAsync(int userId, TransactionFilterDto filter)
     {
-        var transactions = await repository.GetAllAsync(userId);
+        var transactions = await repository.GetAllAsync(userId, filter);
+        return transactions.Select(ToDto);
+    }
+
+    public async Task<IEnumerable<TransactionDto>> GetByCategoryAsync(int userId, int categoryId)
+    {
+        if (!await repository.CategoryExistsAsync(categoryId))
+        {
+            throw new KeyNotFoundException($"No category found with ID: {categoryId}");
+        }
+
+        var transactions = await repository.GetByCategoryAsync(userId, categoryId);
         return transactions.Select(ToDto);
     }
 
