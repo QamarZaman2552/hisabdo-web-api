@@ -1,6 +1,6 @@
 # HisabDo Web API - Capstone Project
 
-**Day 11 - HisabDo Internship**
+**Day 12 - HisabDo Internship**
 
 A .NET-based web application that mirrors the HisabDo mobile app (Khata/Ledger application).
 
@@ -13,7 +13,7 @@ ASP.NET Core Web API with Clean Architecture, EF Core, SQL Server and working CR
 
 ---
 
-# Day 10 - Categories Module
+# Day 12 - Settings Module + Authentication
 
 ## How to Run
 
@@ -154,12 +154,63 @@ All errors return a consistent JSON response:
 ```
 
 - 400 Bad Request - invalid operation (e.g. customer/category not found)
+- 401 Unauthorized - invalid email/password or missing/invalid token
 - 404 Not Found - resource not found
 - 500 Internal Server Error - unexpected error
 
+### Settings (Day 12)
+
+One settings row per user (1-to-1 relationship with `User`, unique index on `UserId`).
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/v1/settings | Get current user settings |
+| PUT | /api/v1/settings | Create or update settings (upsert) |
+| DELETE | /api/v1/settings | Reset/delete settings (soft) |
+
+### Authentication (Day 12 - initial implementation)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/v1/auth/register | Create account + return JWT token |
+| POST | /api/v1/auth/login | Login + return JWT token |
+| GET | /api/v1/auth/me | Get current user claims (requires Bearer token) |
+
+Authentication architecture:
+- Passwords hashed with **BCrypt** (never stored in plain text).
+- JWT token contains: `sub` (userId), `email`, `name`, `role` claims; expires after 24 hours (configurable in `appsettings.json` -> `Jwt`).
+- **Role concept**: `User` has a Role column (`User` / `Admin`). Roles are issued as JWT claims for future role-based authorization (`[Authorize(Roles = "Admin")]`).
+- Protected endpoints use `[Authorize]` - currently `/api/v1/auth/me` demonstrates this (401 without a valid token).
+- Demo account: `demo@hisabdo.com` / `Demo@123` (Role: Admin).
+
+Registration sample:
+
+```json
+POST /api/v1/auth/register
+{
+  "fullName": "Qamar Zaman",
+  "businessName": "My Shop",
+  "email": "qamar@example.com",
+  "phone": "03001234567",
+  "password": "Strong@123"
+}
+```
+
+Login sample (returns the token):
+
+```json
+POST /api/v1/auth/login
+{
+  "email": "qamar@example.com",
+  "password": "Strong@123"
+}
+```
+
+To call protected endpoints in Swagger click **Authorize** and paste `Bearer <token>`.
+
 ### Notes
 
-- No JWT yet: controllers use the seeded demo user (UserId = 1). JWT auth comes in a later step.
+- Business CRUD controllers still use the seeded demo user (UserId = 1) until the full `[Authorize]` rollout; the user ID will come from the JWT token in the next step.
 
 ## Screenshots
 

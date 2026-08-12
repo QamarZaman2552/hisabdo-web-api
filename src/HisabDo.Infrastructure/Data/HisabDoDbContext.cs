@@ -23,6 +23,7 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
             entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
             entity.HasIndex(u => u.Email).IsUnique();
             entity.Property(u => u.Phone).HasMaxLength(20);
+            entity.Property(u => u.Role).HasMaxLength(20);
             entity.Property(u => u.CurrencyCode).HasMaxLength(10);
             entity.Property(u => u.LanguageCode).HasMaxLength(10);
         });
@@ -59,7 +60,7 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
         modelBuilder.Entity<Setting>(entity =>
         {
             entity.HasKey(s => s.Id);
-            entity.HasIndex(s => s.UserId).IsUnique();
+            entity.HasIndex(s => s.UserId).IsUnique().HasFilter("[IsDeleted] = 0");
             entity.Property(s => s.CurrencyCode).HasMaxLength(10);
             entity.Property(s => s.LanguageCode).HasMaxLength(10);
         });
@@ -113,7 +114,8 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
                 BusinessName = "Demo Shop",
                 Email = "demo@hisabdo.com",
                 Phone = "03000000000",
-                PasswordHash = string.Empty,
+                PasswordHash = "$2a$11$s8ApQ4Gy1p04rFS0jgd/deaRe9QbZM/4AhyqmgFytPQW6dp5A/lD.",
+                Role = "Admin",
                 CurrencyCode = "PKR",
                 LanguageCode = "en",
                 CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc)

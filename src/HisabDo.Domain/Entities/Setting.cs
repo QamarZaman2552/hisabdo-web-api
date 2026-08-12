@@ -6,6 +6,7 @@ public class Setting
     public int UserId { get; set; }
     public string CurrencyCode { get; set; } = "PKR";
     public string LanguageCode { get; set; } = "en";
+    public bool IsDeleted { get; set; }
 
     public User? User { get; set; }
 }

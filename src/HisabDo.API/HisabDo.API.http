@@ -32,6 +32,44 @@ Accept: application/json
 
 ###
 
+POST {{HisabDo.API_HostAddress}}/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Qamar Zaman",
+  "businessName": "My Shop",
+  "email": "qamar@example.com",
+  "phone": "03001234567",
+  "password": "Strong@123"
+}
+
+###
+
+POST {{HisabDo.API_HostAddress}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "qamar@example.com",
+  "password": "Strong@123"
+}
+
+###
+
+GET {{HisabDo.API_HostAddress}}/api/v1/settings
+Accept: application/json
+
+###
+
+PUT {{HisabDo.API_HostAddress}}/api/v1/settings
+Content-Type: application/json
+
+{
+  "currencyCode": "USD",
+  "languageCode": "en"
+}
+
+###
+
 POST {{HisabDo.API_HostAddress}}/api/v1/transactions
 Content-Type: application/json
 

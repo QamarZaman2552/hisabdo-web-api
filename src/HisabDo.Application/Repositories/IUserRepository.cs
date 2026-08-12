@@ -1,0 +1,17 @@
+using HisabDo.Domain.Entities;
+
+namespace HisabDo.Application.Repositories;
+
+public interface IUserRepository
+{
+    Task<User?> GetByEmailAsync(string email);
+    Task<bool> EmailExistsAsync(string email);
+    Task<User> AddAsync(User user);
+}
+
+public interface ISettingRepository
+{
+    Task<Setting?> GetByUserIdAsync(int userId);
+    Task<Setting> AddOrUpdateAsync(Setting setting);
+    Task RemoveAsync(Setting setting);
+}

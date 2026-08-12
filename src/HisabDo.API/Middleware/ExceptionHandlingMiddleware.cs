@@ -22,6 +22,11 @@ public class ExceptionHandlingMiddleware(
             logger.LogWarning(ex, "Invalid operation in request.");
             await WriteErrorAsync(context, StatusCodes.Status400BadRequest, ex.Message);
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            logger.LogWarning(ex, "Unauthorized access attempt.");
+            await WriteErrorAsync(context, StatusCodes.Status401Unauthorized, ex.Message);
+        }
         catch (Exception ex)
         {
             logger.LogError(ex, "An unhandled exception occurred.");

@@ -9,6 +9,7 @@ public class User : BaseEntity
     public string Email { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
+    public string Role { get; set; } = "User";
     public string CurrencyCode { get; set; } = "PKR";
     public string LanguageCode { get; set; } = "en";
 
