@@ -1,23 +1,25 @@
+using HisabDo.API.Extensions;
 using HisabDo.Application.DTOs;
 using HisabDo.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HisabDo.API.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
+[Authorize]
 public class SettingsController(ISettingService settingService) : ControllerBase
 {
-    private const int CurrentUserId = 1;
-
     [HttpGet]
     public async Task<ActionResult<SettingDto>> GetSettings()
     {
-        var settings = await settingService.GetAsync(CurrentUserId);
+        var userId = User.GetUserId();
+        var settings = await settingService.GetAsync(userId);
 
         if (settings == null)
         {
-            return NotFound(new { message = $"No settings found for user ID: {CurrentUserId}" });
+            return NotFound(new { message = $"No settings found for user ID: {userId}" });
         }
 
         return Ok(settings);
@@ -26,7 +28,7 @@ public class SettingsController(ISettingService settingService) : ControllerBase
     [HttpPut]
     public async Task<ActionResult<SettingDto>> UpdateSettings([FromBody] UpdateSettingDto settingsDto)
     {
-        var settings = await settingService.UpdateAsync(CurrentUserId, settingsDto);
+        var settings = await settingService.UpdateAsync(User.GetUserId(), settingsDto);
 
         return Ok(settings);
     }
@@ -34,7 +36,7 @@ public class SettingsController(ISettingService settingService) : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> DeleteSettings()
     {
-        await settingService.DeleteAsync(CurrentUserId);
+        await settingService.DeleteAsync(User.GetUserId());
 
         return NoContent();
     }

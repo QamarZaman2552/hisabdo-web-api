@@ -1,19 +1,20 @@
+using HisabDo.API.Extensions;
 using HisabDo.Application.DTOs;
 using HisabDo.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HisabDo.API.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
+[Authorize]
 public class CategoriesController(ICategoryService categoryService) : ControllerBase
 {
-    private const int CurrentUserId = 1;
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAllCategories()
     {
-        return Ok(await categoryService.GetAllAsync(CurrentUserId));
+        return Ok(await categoryService.GetAllAsync(User.GetUserId()));
     }
 
     [HttpGet("{id:int}")]
@@ -32,7 +33,7 @@ public class CategoriesController(ICategoryService categoryService) : Controller
     [HttpPost]
     public async Task<ActionResult<CategoryDto>> AddCategory([FromBody] CreateCategoryDto categoryDto)
     {
-        var category = await categoryService.CreateAsync(CurrentUserId, categoryDto);
+        var category = await categoryService.CreateAsync(User.GetUserId(), categoryDto);
 
         return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
     }

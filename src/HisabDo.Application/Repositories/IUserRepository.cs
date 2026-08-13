@@ -6,6 +6,7 @@ public interface IUserRepository
 {
     Task<User?> GetByEmailAsync(string email);
     Task<bool> EmailExistsAsync(string email);
+    Task<List<User>> GetUsersAsync();
     Task<User> AddAsync(User user);
 }
 

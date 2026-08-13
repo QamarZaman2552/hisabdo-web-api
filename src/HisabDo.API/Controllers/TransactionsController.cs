@@ -1,25 +1,26 @@
+using HisabDo.API.Extensions;
 using HisabDo.Application.DTOs;
 using HisabDo.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HisabDo.API.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
+[Authorize]
 public class TransactionsController(ITransactionService transactionService) : ControllerBase
 {
-    private const int CurrentUserId = 1;
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TransactionDto>>> GetAllTransactions([FromQuery] TransactionFilterDto filter)
     {
-        return Ok(await transactionService.GetAllAsync(CurrentUserId, filter));
+        return Ok(await transactionService.GetAllAsync(User.GetUserId(), filter));
     }
 
     [HttpGet("~/api/v1/categories/{categoryId:int}/transactions")]
     public async Task<ActionResult<IEnumerable<TransactionDto>>> GetTransactionsByCategory(int categoryId)
     {
-        return Ok(await transactionService.GetByCategoryAsync(CurrentUserId, categoryId));
+        return Ok(await transactionService.GetByCategoryAsync(User.GetUserId(), categoryId));
     }
 
     [HttpGet("{id:int}")]
@@ -38,7 +39,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     [HttpPost]
     public async Task<ActionResult<TransactionDto>> AddTransaction([FromBody] CreateTransactionDto transactionDto)
     {
-        var transaction = await transactionService.CreateAsync(CurrentUserId, transactionDto);
+        var transaction = await transactionService.CreateAsync(User.GetUserId(), transactionDto);
 
         return CreatedAtAction(nameof(GetTransactionById), new { id = transaction.Id }, transaction);
     }

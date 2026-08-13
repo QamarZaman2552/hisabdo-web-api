@@ -1,6 +1,6 @@
 # HisabDo Web API - Capstone Project
 
-**Day 12 - HisabDo Internship**
+**Day 13 - HisabDo Internship**
 
 A .NET-based web application that mirrors the HisabDo mobile app (Khata/Ledger application).
 
@@ -13,7 +13,16 @@ ASP.NET Core Web API with Clean Architecture, EF Core, SQL Server and working CR
 
 ---
 
-# Day 12 - Settings Module + Authentication
+# Day 13 - Authentication & Authorization (Complete)
+
+## Authorization
+
+- **All business APIs are now protected** with `[Authorize]` (Customers, Transactions, Categories, Settings).
+- The logged-in user's ID is read from the JWT `sub` claim — every user only sees **their own** data (data isolation).
+- **Role-based access**: `GET /api/v1/admin/users` requires the `Admin` role → `403 Forbidden` for normal users, `200` for admins.
+- Demo account: `demo@hisabdo.com` / `Demo@123` (Role: Admin).
+
+To call protected endpoints in **Swagger**: click **Authorize**, paste `Bearer <token>`. In **Postman**: Authorization tab → type `Bearer Token` → paste the token.
 
 ## How to Run
 
@@ -175,6 +184,7 @@ One settings row per user (1-to-1 relationship with `User`, unique index on `Use
 | POST | /api/v1/auth/register | Create account + return JWT token |
 | POST | /api/v1/auth/login | Login + return JWT token |
 | GET | /api/v1/auth/me | Get current user claims (requires Bearer token) |
+| GET | /api/v1/admin/users | List all users (**Admin only**, 403 for User role) |
 
 Authentication architecture:
 - Passwords hashed with **BCrypt** (never stored in plain text).
@@ -210,7 +220,8 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 
 ### Notes
 
-- Business CRUD controllers still use the seeded demo user (UserId = 1) until the full `[Authorize]` rollout; the user ID will come from the JWT token in the next step.
+- Business CRUD controllers read the user ID from the JWT token (`sub` claim) — each user only accesses their own data.
+- Feedback report for the product analysis sub-task: [feedback/feedback-report.md](feedback/feedback-report.md)
 
 ## Screenshots
 

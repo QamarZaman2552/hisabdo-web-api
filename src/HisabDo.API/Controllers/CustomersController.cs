@@ -1,19 +1,20 @@
+using HisabDo.API.Extensions;
 using HisabDo.Application.DTOs;
 using HisabDo.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HisabDo.API.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
+[Authorize]
 public class CustomersController(ICustomerService customerService) : ControllerBase
 {
-    private const int CurrentUserId = 1;
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
     {
-        return Ok(await customerService.GetAllAsync(CurrentUserId));
+        return Ok(await customerService.GetAllAsync(User.GetUserId()));
     }
 
     [HttpGet("{id:int}")]
@@ -32,7 +33,7 @@ public class CustomersController(ICustomerService customerService) : ControllerB
     [HttpPost]
     public async Task<ActionResult<CustomerDto>> AddCustomer([FromBody] CreateCustomerDto customerDto)
     {
-        var customer = await customerService.CreateAsync(CurrentUserId, customerDto);
+        var customer = await customerService.CreateAsync(User.GetUserId(), customerDto);
 
         return CreatedAtAction(nameof(GetCustomerById), new { id = customer.Id }, customer);
     }

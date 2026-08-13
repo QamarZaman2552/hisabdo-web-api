@@ -60,6 +60,12 @@ Accept: application/json
 
 ###
 
+GET {{HisabDo.API_HostAddress}}/api/v1/admin/users
+Accept: application/json
+Authorization: Bearer <paste-token-here>
+
+###
+
 PUT {{HisabDo.API_HostAddress}}/api/v1/settings
 Content-Type: application/json
 

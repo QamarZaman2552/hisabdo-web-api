@@ -19,6 +19,13 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
             .AnyAsync(u => u.Email.ToLower() == email.ToLower());
     }
 
+    public async Task<List<User>> GetUsersAsync()
+    {
+        return await context.Users
+            .OrderBy(u => u.CreatedAt)
+            .ToListAsync();
+    }
+
     public async Task<User> AddAsync(User user)
     {
         context.Users.Add(user);
