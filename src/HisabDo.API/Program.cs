@@ -34,7 +34,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
         };
-        options.MapInboundClaims = false;
+options.MapInboundClaims = false;
     });
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
