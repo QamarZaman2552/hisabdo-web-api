@@ -64,9 +64,9 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Enter the JWT token from /auth/login. Example: <token>"
     });
 
-    options.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
+    options.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
     {
-        { new OpenApiSecuritySchemeReference("Bearer"), new List<string>() }
+        { new OpenApiSecuritySchemeReference("Bearer", doc), new List<string>() }
     });
 });
 
