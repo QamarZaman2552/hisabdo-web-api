@@ -1,6 +1,6 @@
 # HisabDo Web API - Capstone Project
 
-**Day 13 - HisabDo Internship**
+**Day 14 - HisabDo Internship**
 
 A .NET-based web application that mirrors the HisabDo mobile app (Khata/Ledger application).
 
@@ -13,7 +13,7 @@ ASP.NET Core Web API with Clean Architecture, EF Core, SQL Server and working CR
 
 ---
 
-# Day 13 - Authentication & Authorization (Complete)
+# Day 14 - Authentication & Authorization (Complete)
 
 ## Authorization
 
@@ -177,7 +177,7 @@ One settings row per user (1-to-1 relationship with `User`, unique index on `Use
 | PUT | /api/v1/settings | Create or update settings (upsert) |
 | DELETE | /api/v1/settings | Reset/delete settings (soft) |
 
-### Authentication & Authorization (Day 13)
+### Authentication & Authorization (Day 14)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -321,7 +321,7 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 
 ![SQL Server 1](screenshots/Day-11-Task/SqlServer_Day_11/Screenshot%202026-08-11%20155531.png)
 
-### Swagger - Day 13
+### Swagger - Day 14
 
 ![Swagger 1](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20151509.png)
 ![Swagger 2](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20151518.png)
@@ -339,7 +339,7 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 ![Swagger 14](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20164054.png)
 ![Swagger 15](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20170005.png)
 
-### SQL Server - Day 13
+### SQL Server - Day 14
 
 ![SQL Server 1](screenshots/Day-13-Task/SqlServer_Day_13/Screenshot%202026-08-13%20170844.png)
 
