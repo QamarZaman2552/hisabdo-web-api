@@ -31,6 +31,9 @@
 
 ## Evidence
 
-Screenshots of the feedback collection are in the [user-review-screenshots](evidence/user-review-screenshots) folder.
+Screenshots of the feedback collection:
 
-<!-- Evidence screenshots will be embedded here after they are added -->
+![Evidence 1](evidence/user-review-screenshots/Screenshot%202026-08-13%20171357.png)
+![Evidence 2](evidence/user-review-screenshots/Screenshot%202026-08-13%20171823.png)
+![Evidence 3](evidence/user-review-screenshots/Screenshot%202026-08-13%20171847.png)
+![Evidence 4](evidence/user-review-screenshots/Screenshot%202026-08-13%20172012.png)

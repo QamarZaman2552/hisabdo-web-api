@@ -321,3 +321,25 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 
 ![SQL Server 1](screenshots/Day-11-Task/SqlServer_Day_11/Screenshot%202026-08-11%20155531.png)
 
+### Swagger - Day 13
+
+![Swagger 1](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20151509.png)
+![Swagger 2](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20151518.png)
+![Swagger 3](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20153559.png)
+![Swagger 4](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20153636.png)
+![Swagger 5](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20155227.png)
+![Swagger 6](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20155257.png)
+![Swagger 7](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20155402.png)
+![Swagger 8](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20155409.png)
+![Swagger 9](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20163828.png)
+![Swagger 10](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20163839.png)
+![Swagger 11](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20163857.png)
+![Swagger 12](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20163924.png)
+![Swagger 13](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20164024.png)
+![Swagger 14](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20164054.png)
+![Swagger 15](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20170005.png)
+
+### SQL Server - Day 13
+
+![SQL Server 1](screenshots/Day-13-Task/SqlServer_Day_13/Screenshot%202026-08-13%20170844.png)
+
