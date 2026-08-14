@@ -1,4 +1,4 @@
-# HisabDo Web API - Capstone Project
+﻿# HisabDo Web API - Capstone Project
 
 **Day 14 - HisabDo Internship**
 
@@ -18,11 +18,11 @@ ASP.NET Core Web API with Clean Architecture, EF Core, SQL Server and working CR
 ## Authorization
 
 - **All business APIs are now protected** with `[Authorize]` (Customers, Transactions, Categories, Settings).
-- The logged-in user's ID is read from the JWT `sub` claim — every user only sees **their own** data (data isolation).
-- **Role-based access**: `GET /api/v1/admin/users` requires the `Admin` role → `403 Forbidden` for normal users, `200` for admins.
+- The logged-in user's ID is read from the JWT `sub` claim â€” every user only sees **their own** data (data isolation).
+- **Role-based access**: `GET /api/v1/admin/users` requires the `Admin` role â†’ `403 Forbidden` for normal users, `200` for admins.
 - Demo account: `demo@hisabdo.com` / `Demo@123` (Role: Admin).
 
-To call protected endpoints in **Swagger**: click **Authorize**, paste `Bearer <token>`. In **Postman**: Authorization tab → type `Bearer Token` → paste the token.
+To call protected endpoints in **Swagger**: click **Authorize**, paste `Bearer <token>`. In **Postman**: Authorization tab â†’ type `Bearer Token` â†’ paste the token.
 
 ## How to Run
 
@@ -52,14 +52,14 @@ Open `http://localhost:5181/swagger` to test (the API opens Swagger automaticall
 
 ```text
 hisabdo-web-api/
-├── src/
-│   ├── HisabDo.API/            # Controllers, middleware, Program.cs, config
-│   ├── HisabDo.Application/    # Services, DTOs, repository interfaces
-│   ├── HisabDo.Domain/         # Entities, enums, base class
-│   └── HisabDo.Infrastructure/ # EF Core, DbContext, repositories (implementations)
-├── tests/                      # (future)
-├── docs/ERD.md                 # Database diagram
-└── README.md
+â”œâ”€â”€ src/
+â”‚   â”œâ”€â”€ HisabDo.API/            # Controllers, middleware, Program.cs, config
+â”‚   â”œâ”€â”€ HisabDo.Application/    # Services, DTOs, repository interfaces
+â”‚   â”œâ”€â”€ HisabDo.Domain/         # Entities, enums, base class
+â”‚   â””â”€â”€ HisabDo.Infrastructure/ # EF Core, DbContext, repositories (implementations)
+â”œâ”€â”€ tests/                      # (future)
+â”œâ”€â”€ docs/ERD.md                 # Database diagram
+â””â”€â”€ README.md
 ```
 
 Project references (one direction only):
@@ -223,7 +223,7 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 
 ### Notes
 
-- Business CRUD controllers read the user ID from the JWT token (`sub` claim) — each user only accesses their own data.
+- Business CRUD controllers read the user ID from the JWT token (`sub` claim) â€” each user only accesses their own data.
 - Feedback report for the product analysis sub-task: [feedback/feedback-report.md](feedback/feedback-report.md)
 
 ## Screenshots
@@ -342,4 +342,5 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 ### SQL Server - Day 14
 
 ![SQL Server 1](screenshots/Day-13-Task/SqlServer_Day_13/Screenshot%202026-08-13%20170844.png)
+
 
