@@ -323,24 +323,28 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 
 ### Swagger - Day 14
 
-![Swagger 1](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20151509.png)
-![Swagger 2](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20151518.png)
-![Swagger 3](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20153559.png)
-![Swagger 4](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20153636.png)
-![Swagger 5](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20155227.png)
-![Swagger 6](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20155257.png)
-![Swagger 7](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20155402.png)
-![Swagger 8](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20155409.png)
-![Swagger 9](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20163828.png)
-![Swagger 10](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20163839.png)
-![Swagger 11](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20163857.png)
-![Swagger 12](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20163924.png)
-![Swagger 13](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20164024.png)
-![Swagger 14](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20164054.png)
-![Swagger 15](screenshots/Day-13-Task/Swagger_Day_13/Screenshot%202026-08-13%20170005.png)
+![Swagger 1](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20163638.png)
+![Swagger 2](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20163658.png)
+![Swagger 3](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20163809.png)
+![Swagger 4](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165217.png)
+![Swagger 5](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165227.png)
+![Swagger 6](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165400.png)
+![Swagger 7](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165417.png)
+![Swagger 8](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165502.png)
+![Swagger 9](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165537.png)
+![Swagger 10](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165659.png)
+![Swagger 11](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165714.png)
+![Swagger 12](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165817.png)
+![Swagger 13](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165936.png)
+![Swagger 14](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20165951.png)
+![Swagger 15](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20170015.png)
+![Swagger 16](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20170042.png)
+![Swagger 17](screenshots/Day-14-Task/Swagger_Day_14/Screenshot%202026-08-14%20170125.png)
 
 ### SQL Server - Day 14
 
-![SQL Server 1](screenshots/Day-13-Task/SqlServer_Day_13/Screenshot%202026-08-13%20170844.png)
+![SQL Server 1](screenshots/Day-14-Task/SqlServer_Day_14/Screenshot%202026-08-13%20170844.png)
+![SQL Server 2](screenshots/Day-14-Task/SqlServer_Day_14/Screenshot%202026-08-14%20170755.png)
+![SQL Server 3](screenshots/Day-14-Task/SqlServer_Day_14/Screenshot%202026-08-14%20170814.png)
 
 
