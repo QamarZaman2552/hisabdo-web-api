@@ -11,6 +11,8 @@ public class AuthService(
 {
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
     {
+        PasswordPolicy.Validate(dto.Password);
+
         if (await repository.EmailExistsAsync(dto.Email))
         {
             throw new InvalidOperationException($"An account with the email '{dto.Email}' already exists.");
@@ -43,6 +45,43 @@ public class AuthService(
         return ToAuthResponse(user);
     }
 
+    public async Task<UserProfileDto> GetProfileAsync(int userId)
+    {
+        var user = await repository.GetByIdAsync(userId)
+            ?? throw new KeyNotFoundException("User not found.");
+
+        return ToProfile(user);
+    }
+
+    public async Task<UserProfileDto> UpdateProfileAsync(int userId, UpdateProfileDto dto)
+    {
+        var user = await repository.GetByIdAsync(userId)
+            ?? throw new KeyNotFoundException("User not found.");
+
+        user.FullName = dto.FullName;
+        user.BusinessName = dto.BusinessName ?? string.Empty;
+        user.Phone = dto.Phone ?? string.Empty;
+
+        await repository.UpdateAsync(user);
+        return ToProfile(user);
+    }
+
+    public async Task ChangePasswordAsync(int userId, ChangePasswordDto dto)
+    {
+        var user = await repository.GetByIdAsync(userId)
+            ?? throw new KeyNotFoundException("User not found.");
+
+        if (!passwordHasher.Verify(dto.OldPassword, user.PasswordHash))
+        {
+            throw new UnauthorizedAccessException("Current password is incorrect.");
+        }
+
+        PasswordPolicy.Validate(dto.NewPassword);
+
+        user.PasswordHash = passwordHasher.Hash(dto.NewPassword);
+        await repository.UpdateAsync(user);
+    }
+
     private AuthResponseDto ToAuthResponse(User user)
     {
         var (token, expiresAt) = tokenService.CreateToken(user);
@@ -55,6 +94,22 @@ public class AuthService(
             FullName = user.FullName,
             Email = user.Email,
             Role = user.Role
+        };
+    }
+
+    private static UserProfileDto ToProfile(User user)
+    {
+        return new UserProfileDto
+        {
+            Id = user.Id,
+            FullName = user.FullName,
+            BusinessName = user.BusinessName,
+            Email = user.Email,
+            Phone = user.Phone,
+            Role = user.Role,
+            CurrencyCode = user.CurrencyCode,
+            LanguageCode = user.LanguageCode,
+            CreatedAt = user.CreatedAt
         };
     }
 }

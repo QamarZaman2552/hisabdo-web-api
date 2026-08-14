@@ -13,6 +13,12 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
             .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
     }
 
+    public async Task<User?> GetByIdAsync(int userId)
+    {
+        return await context.Users
+            .FirstOrDefaultAsync(u => u.Id == userId);
+    }
+
     public async Task<bool> EmailExistsAsync(string email)
     {
         return await context.Users
@@ -31,5 +37,11 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
         context.Users.Add(user);
         await context.SaveChangesAsync();
         return user;
+    }
+
+    public async Task UpdateAsync(User user)
+    {
+        context.Users.Update(user);
+        await context.SaveChangesAsync();
     }
 }

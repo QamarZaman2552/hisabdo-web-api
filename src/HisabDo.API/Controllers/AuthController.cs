@@ -1,5 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using HisabDo.API.Extensions;
 using HisabDo.Application.DTOs;
 using HisabDo.Application.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -29,12 +28,24 @@ public class AuthController(IAuthService authService) : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public IActionResult Me()
+    public async Task<ActionResult<UserProfileDto>> Me()
     {
-        var userId = int.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? "0");
-        var email = User.FindFirstValue(JwtRegisteredClaimNames.Email);
-        var role = User.FindFirstValue(ClaimTypes.Role);
+        return Ok(await authService.GetProfileAsync(User.GetUserId()));
+    }
 
-        return Ok(new { userId, email, role });
+    [Authorize]
+    [HttpPut("me")]
+    public async Task<ActionResult<UserProfileDto>> UpdateMe([FromBody] UpdateProfileDto updateProfileDto)
+    {
+        return Ok(await authService.UpdateProfileAsync(User.GetUserId(), updateProfileDto));
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePasswordDto)
+    {
+        await authService.ChangePasswordAsync(User.GetUserId(), changePasswordDto);
+
+        return Ok(new { message = "Password changed successfully." });
     }
 }

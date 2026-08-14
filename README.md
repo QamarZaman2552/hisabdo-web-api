@@ -177,20 +177,23 @@ One settings row per user (1-to-1 relationship with `User`, unique index on `Use
 | PUT | /api/v1/settings | Create or update settings (upsert) |
 | DELETE | /api/v1/settings | Reset/delete settings (soft) |
 
-### Authentication (Day 12 - initial implementation)
+### Authentication & Authorization (Day 13)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | /api/v1/auth/register | Create account + return JWT token |
 | POST | /api/v1/auth/login | Login + return JWT token |
-| GET | /api/v1/auth/me | Get current user claims (requires Bearer token) |
+| GET | /api/v1/auth/me | Get current user profile (requires Bearer token) |
+| PUT | /api/v1/auth/me | Update current user profile (name, business, phone) |
+| POST | /api/v1/auth/change-password | Change password (requires old password) |
 | GET | /api/v1/admin/users | List all users (**Admin only**, 403 for User role) |
 
 Authentication architecture:
 - Passwords hashed with **BCrypt** (never stored in plain text).
+- **Password policy**: 8-64 characters, must include uppercase, lowercase, digit, and special character (applied on register and change-password).
 - JWT token contains: `sub` (userId), `email`, `name`, `role` claims; expires after 24 hours (configurable in `appsettings.json` -> `Jwt`).
-- **Role concept**: `User` has a Role column (`User` / `Admin`). Roles are issued as JWT claims for future role-based authorization (`[Authorize(Roles = "Admin")]`).
-- Protected endpoints use `[Authorize]` - currently `/api/v1/auth/me` demonstrates this (401 without a valid token).
+- **Role-based authorization**: `[Authorize(Roles = "Admin")]` restricts endpoints (e.g. `/api/v1/admin/users` -> 403 for User role).
+- All business endpoints (Customers, Transactions, Categories, Settings) require a valid token (401 without it).
 - Demo account: `demo@hisabdo.com` / `Demo@123` (Role: Admin).
 
 Registration sample:
