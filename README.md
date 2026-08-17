@@ -367,4 +367,17 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 ![SQL Server 2](screenshots/Day-14-Task/SqlServer_Day_14/Screenshot%202026-08-14%20170755.png)
 ![SQL Server 3](screenshots/Day-14-Task/SqlServer_Day_14/Screenshot%202026-08-14%20170814.png)
 
+### Swagger - Day 15-16
+
+![Swagger 1](screenshots/Day-15-16-Task/Swagger_Day_15-16/Screenshot%202026-08-17%20150626.png)
+![Swagger 2](screenshots/Day-15-16-Task/Swagger_Day_15-16/Screenshot%202026-08-17%20150643.png)
+![Swagger 3](screenshots/Day-15-16-Task/Swagger_Day_15-16/Screenshot%202026-08-17%20150736.png)
+![Swagger 4](screenshots/Day-15-16-Task/Swagger_Day_15-16/Screenshot%202026-08-17%20151016.png)
+![Swagger 5](screenshots/Day-15-16-Task/Swagger_Day_15-16/Screenshot%202026-08-17%20151047.png)
+
+### SQL Server - Day 15-16
+
+![SQL Server 1](screenshots/Day-15-16-Task/SqlServer_Day_15-16/Screenshot%202026-08-17%20151452.png)
+![SQL Server 2](screenshots/Day-15-16-Task/SqlServer_Day_15-16/Screenshot%202026-08-17%20151525.png)
+
 
