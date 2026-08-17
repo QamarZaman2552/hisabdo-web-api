@@ -18,11 +18,31 @@ ASP.NET Core Web API with Clean Architecture, EF Core, SQL Server and working CR
 ## Authorization
 
 - **All business APIs are now protected** with `[Authorize]` (Customers, Transactions, Categories, Settings).
-- The logged-in user's ID is read from the JWT `sub` claim â€” every user only sees **their own** data (data isolation).
-- **Role-based access**: `GET /api/v1/admin/users` requires the `Admin` role â†’ `403 Forbidden` for normal users, `200` for admins.
+- The logged-in user's ID is read from the JWT `sub` claim - every user only sees **their own** data (data isolation).
+- **Role-based access**: `GET /api/v1/admin/users` requires the `Admin` role -> `403 Forbidden` for normal users, `200` for admins.
 - Demo account: `demo@hisabdo.com` / `Demo@123` (Role: Admin).
 
-To call protected endpoints in **Swagger**: click **Authorize**, paste `Bearer <token>`. In **Postman**: Authorization tab â†’ type `Bearer Token` â†’ paste the token.
+To call protected endpoints in **Swagger**: click **Authorize**, paste `Bearer <token>`. In **Postman**: Authorization tab -> type `Bearer Token` -> paste the token.
+
+# Day 15-16 - Reports, Database Improvements & Finalized Auth (Complete)
+
+## Reports / Dashboard (new)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/v1/reports/summary | Dashboard totals: customers, categories, transactions, receivable, payable, balance + this month's received/paid (requires token) |
+| GET | /api/v1/reports/by-category | Per-category breakdown: transaction count + receivable/payable totals (requires token) |
+
+## Database improvements
+
+- **Indexes added** for report performance: `(UserId, Type)` and `(UserId, Type, TransactionDate)` on Transactions.
+- **Unique index** on `(UserId, Name)` for Categories - enforces one category name per user at the database level.
+- Amounts stored as `decimal(18,2)`.
+
+## Authentication finalized
+
+- JWT register/login, role-based authorization (`Admin` / `User`), user profile APIs (`GET/PUT /auth/me`, `POST /auth/change-password`), password policy validation - all verified end-to-end.
+- Demo account: `demo@hisabdo.com` / `Demo@123` (Admin).
 
 ## How to Run
 
@@ -223,7 +243,7 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 
 ### Notes
 
-- Business CRUD controllers read the user ID from the JWT token (`sub` claim) â€” each user only accesses their own data.
+- Business CRUD controllers read the user ID from the JWT token (`sub` claim) - each user only accesses their own data.
 - Feedback report for the product analysis sub-task: [feedback/feedback-report.md](feedback/feedback-report.md)
 
 ## Screenshots

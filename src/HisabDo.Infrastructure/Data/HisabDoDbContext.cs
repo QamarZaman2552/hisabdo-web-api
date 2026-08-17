@@ -44,6 +44,7 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
             entity.HasKey(c => c.Id);
             entity.Property(c => c.Name).IsRequired().HasMaxLength(50);
             entity.HasIndex(c => c.UserId);
+            entity.HasIndex(c => new { c.UserId, c.Name }).IsUnique();
         });
 
         modelBuilder.Entity<Transaction>(entity =>
@@ -53,6 +54,8 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
             entity.Property(t => t.Note).HasMaxLength(500);
             entity.HasIndex(t => t.UserId);
             entity.HasIndex(t => new { t.UserId, t.TransactionDate });
+            entity.HasIndex(t => new { t.UserId, t.Type });
+            entity.HasIndex(t => new { t.UserId, t.Type, t.TransactionDate });
             entity.HasIndex(t => t.CustomerId);
             entity.HasIndex(t => t.CategoryId);
         });
