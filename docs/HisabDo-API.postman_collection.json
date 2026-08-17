@@ -1,0 +1,698 @@
+{
+    "variable":  [
+                     {
+                         "key":  "baseUrl",
+                         "value":  "https://localhost:7071/api/v1"
+                     },
+                     {
+                         "key":  "token",
+                         "value":  ""
+                     }
+                 ],
+    "info":  {
+                 "description":  "Complete API collection for the HisabDo capstone project. Run Auth - Login first - the token is saved automatically and applied to all requests.",
+                 "name":  "HisabDo Web API",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+             },
+    "item":  [
+                 {
+                     "name":  "Auth - Register",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"fullName\":\"New User\",\"businessName\":\"My Shop\",\"email\":\"user@example.com\",\"phone\":\"03001234567\",\"password\":\"Strong@123\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "POST",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/auth/register",
+                                                 "path":  [
+                                                              "auth",
+                                                              "register"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"email\":\"demo@hisabdo.com\",\"password\":\"Demo@123\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "POST",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/auth/login",
+                                                 "path":  [
+                                                              "auth",
+                                                              "login"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 },
+                     "name":  "Auth - Login",
+                     "event":  [
+                                   {
+                                       "script":  {
+                                                      "exec":  [
+                                                                   "const json = pm.response.json();",
+                                                                   "if (json \u0026\u0026 json.token) {",
+                                                                   "  pm.collectionVariables.set(\u0027token\u0027, json.token);",
+                                                                   "}"
+                                                               ],
+                                                      "type":  "text/javascript"
+                                                  },
+                                       "listen":  "test"
+                                   }
+                               ]
+                 },
+                 {
+                     "name":  "Auth - My Profile",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/auth/me",
+                                                 "path":  [
+                                                              "auth",
+                                                              "me"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Auth - Update Profile",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"fullName\":\"Qamar Zaman\",\"businessName\":\"Zaman Traders\",\"phone\":\"03001234567\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "PUT",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/auth/me",
+                                                 "path":  [
+                                                              "auth",
+                                                              "me"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Auth - Change Password",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"oldPassword\":\"Demo@123\",\"newPassword\":\"New@Pass123\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "POST",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/auth/change-password",
+                                                 "path":  [
+                                                              "auth",
+                                                              "change-password"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Admin - Users",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/admin/users",
+                                                 "path":  [
+                                                              "admin",
+                                                              "users"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Categories - List",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/categories",
+                                                 "path":  [
+                                                              "categories"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Categories - By Id",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/categories/1",
+                                                 "path":  [
+                                                              "categories",
+                                                              "1"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Categories - Create",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"name\":\"Groceries\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "POST",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/categories",
+                                                 "path":  [
+                                                              "categories"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Categories - Update",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"name\":\"Groceries \u0026 More\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "PUT",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/categories/1",
+                                                 "path":  [
+                                                              "categories",
+                                                              "1"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Categories - Delete",
+                     "request":  {
+                                     "method":  "DELETE",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/categories/1",
+                                                 "path":  [
+                                                              "categories",
+                                                              "1"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Customers - List",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/customers",
+                                                 "path":  [
+                                                              "customers"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Customers - By Id",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/customers/1",
+                                                 "path":  [
+                                                              "customers",
+                                                              "1"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Customers - Create",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"name\":\"Ali Khan\",\"phone\":\"03001234567\",\"email\":\"ali@example.com\",\"notes\":\"Regular customer\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "POST",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/customers",
+                                                 "path":  [
+                                                              "customers"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Customers - Update",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"name\":\"Ali Khan\",\"phone\":\"03001234567\",\"email\":\"ali@example.com\",\"notes\":\"VIP customer\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "PUT",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/customers/1",
+                                                 "path":  [
+                                                              "customers",
+                                                              "1"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Customers - Delete",
+                     "request":  {
+                                     "method":  "DELETE",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/customers/1",
+                                                 "path":  [
+                                                              "customers",
+                                                              "1"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Transactions - List",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/transactions",
+                                                 "path":  [
+                                                              "transactions"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Transactions - Filter",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/transactions?type=1\u0026customerId=2\u0026categoryId=1\u0026fromDate=2026-08-01\u0026toDate=2026-08-31",
+                                                 "path":  [
+                                                              "transactions?type=1\u0026customerId=2\u0026categoryId=1\u0026fromDate=2026-08-01\u0026toDate=2026-08-31"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Transactions - By Id",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/transactions/1",
+                                                 "path":  [
+                                                              "transactions",
+                                                              "1"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Transactions - Create",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"customerId\":2,\"categoryId\":1,\"type\":1,\"amount\":1500.50,\"note\":\"Khata entry\",\"transactionDate\":\"2026-08-17T10:00:00Z\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "POST",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/transactions",
+                                                 "path":  [
+                                                              "transactions"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Transactions - Update",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"customerId\":2,\"categoryId\":1,\"type\":1,\"amount\":1600.00,\"note\":\"Updated entry\",\"transactionDate\":\"2026-08-17T10:00:00Z\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "PUT",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/transactions/1",
+                                                 "path":  [
+                                                              "transactions",
+                                                              "1"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Transactions - Delete",
+                     "request":  {
+                                     "method":  "DELETE",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/transactions/1",
+                                                 "path":  [
+                                                              "transactions",
+                                                              "1"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Categories - Transactions",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/categories/1/transactions",
+                                                 "path":  [
+                                                              "categories",
+                                                              "1",
+                                                              "transactions"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Settings - Get",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/settings",
+                                                 "path":  [
+                                                              "settings"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Settings - Upsert",
+                     "request":  {
+                                     "body":  {
+                                                  "raw":  "{\"currencyCode\":\"PKR\",\"languageCode\":\"en\"}",
+                                                  "options":  {
+                                                                  "raw":  {
+                                                                              "language":  "json"
+                                                                          }
+                                                              },
+                                                  "mode":  "raw"
+                                              },
+                                     "method":  "PUT",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/settings",
+                                                 "path":  [
+                                                              "settings"
+                                                          ]
+                                             },
+                                     "header":  [
+                                                    {
+                                                        "key":  "Content-Type",
+                                                        "value":  "application/json"
+                                                    }
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Settings - Delete",
+                     "request":  {
+                                     "method":  "DELETE",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/settings",
+                                                 "path":  [
+                                                              "settings"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Reports - Summary",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/reports/summary",
+                                                 "path":  [
+                                                              "reports",
+                                                              "summary"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 },
+                 {
+                     "name":  "Reports - By Category",
+                     "request":  {
+                                     "method":  "GET",
+                                     "url":  {
+                                                 "host":  [
+                                                              "{{baseUrl}}"
+                                                          ],
+                                                 "raw":  "{{baseUrl}}/reports/by-category",
+                                                 "path":  [
+                                                              "reports",
+                                                              "by-category"
+                                                          ]
+                                             },
+                                     "header":  [
+
+                                                ]
+                                 }
+                 }
+             ],
+    "auth":  {
+                 "bearer":  [
+                                {
+                                    "key":  "token",
+                                    "type":  "string",
+                                    "value":  "{{token}}"
+                                }
+                            ],
+                 "type":  "bearer"
+             }
+}

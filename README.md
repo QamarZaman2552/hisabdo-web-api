@@ -44,6 +44,11 @@ To call protected endpoints in **Swagger**: click **Authorize**, paste `Bearer <
 - JWT register/login, role-based authorization (`Admin` / `User`), user profile APIs (`GET/PUT /auth/me`, `POST /auth/change-password`), password policy validation - all verified end-to-end.
 - Demo account: `demo@hisabdo.com` / `Demo@123` (Admin).
 
+# Day 17 - Documentation & Progress Report
+
+- **Postman collection**: import [docs/HisabDo-API.postman_collection.json](docs/HisabDo-API.postman_collection.json) into Postman - run "Auth - Login" first, the token is saved automatically and applied to every request.
+- **Progress report**: [docs/ProgressReport-Day15-17.md](docs/ProgressReport-Day15-17.md) - team members, assigned modules, progress, challenges and blockers.
+
 ## How to Run
 
 1. Edit the connection string in `src/HisabDo.API/appsettings.json` if needed:
