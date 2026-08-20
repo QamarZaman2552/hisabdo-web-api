@@ -32,6 +32,7 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
     public async Task<TransactionDto> CreateAsync(int userId, CreateTransactionDto dto)
     {
         await EnsureCustomerAndCategoryExistAsync(dto.CustomerId, dto.CategoryId);
+        EnsureDateIsNotInFuture(dto.TransactionDate);
 
         var transaction = new Transaction
         {
@@ -54,6 +55,7 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
             ?? throw new KeyNotFoundException($"No transaction found with ID: {id}");
 
         await EnsureCustomerAndCategoryExistAsync(dto.CustomerId, dto.CategoryId);
+        EnsureDateIsNotInFuture(dto.TransactionDate);
 
         transaction.CustomerId = dto.CustomerId;
         transaction.CategoryId = dto.CategoryId;
@@ -87,6 +89,14 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
         }
     }
 
+    private static void EnsureDateIsNotInFuture(DateTime? transactionDate)
+    {
+        if (transactionDate.HasValue && transactionDate.Value.Date > DateTime.UtcNow.Date)
+        {
+            throw new InvalidOperationException("Transaction date cannot be in the future.");
+        }
+    }
+
     private static TransactionDto ToDto(Transaction transaction)
     {
         return new TransactionDto
@@ -99,7 +109,8 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
             Type = transaction.Type,
             Amount = transaction.Amount,
             Note = transaction.Note,
-            TransactionDate = transaction.TransactionDate
+            TransactionDate = transaction.TransactionDate,
+            CreatedAt = transaction.CreatedAt
         };
     }
 }

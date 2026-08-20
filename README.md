@@ -179,18 +179,30 @@ POST /api/v1/categories
 
 `type`: 1 = Receivable, 2 = Payable.
 
-### Error handling
+### Error handling (RFC 7807 ProblemDetails)
 
-All errors return a consistent JSON response:
+All errors return a consistent **ProblemDetails** JSON response with `title`, `status`, `detail` and `traceId`:
 
 ```json
-{ "message": "No customer found with ID: 5" }
+{
+  "type": "https://tools.ietf.org/html/rfc7231#section-6.5",
+  "title": "Bad request",
+  "status": 400,
+  "detail": "Transaction date cannot be in the future.",
+  "traceId": "0HNNUI07M2B14:00000001"
+}
 ```
 
-- 400 Bad Request - invalid operation (e.g. customer/category not found)
+- 400 Bad Request - invalid operation (e.g. customer/category not found, future transaction date, bad amount)
 - 401 Unauthorized - invalid email/password or missing/invalid token
 - 404 Not Found - resource not found
-- 500 Internal Server Error - unexpected error
+- 500 Internal Server Error - unexpected error (generic message, real detail logged)
+
+### API validation
+
+- Model validation via DataAnnotations (`[Required]`, `[Range]`, `[StringLength]`, `[EmailAddress]`) on all create/update DTOs.
+- Amount must be greater than 0, transaction type must be 1 or 2, transaction date cannot be in the future.
+- Service-level checks: customer/category must exist before creating a transaction; category names are unique per user; default category cannot be updated or deleted; a category used by transactions cannot be deleted.
 
 ### Settings (Day 12)
 
@@ -384,5 +396,12 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 
 ![SQL Server 1](screenshots/Day-15-16-Task/SqlServer_Day_15-16/Screenshot%202026-08-17%20151452.png)
 ![SQL Server 2](screenshots/Day-15-16-Task/SqlServer_Day_15-16/Screenshot%202026-08-17%20151525.png)
+
+## Day 18-20 - Validation, Error Handling & DTO Improvements
+
+- **RFC 7807 ProblemDetails** error responses (`title`, `status`, `detail`, `traceId`) for all error paths.
+- **API validation**: transaction date cannot be in the future (create + update), plus existing DataAnnotations checks on all DTOs.
+- **DTO improvements**: `CreatedAt` added to transaction, customer and category responses for better UI ordering/display.
+- Verified via automated HTTP tests: future date -> 400, bad amount -> 400, missing category -> 400, missing customer -> 404, no token -> 401, valid create -> 201.
 
 

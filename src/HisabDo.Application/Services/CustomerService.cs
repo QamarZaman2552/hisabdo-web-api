@@ -63,7 +63,8 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
             Name = customer.Name,
             Phone = customer.Phone,
             Email = customer.Email,
-            Notes = customer.Notes
+            Notes = customer.Notes,
+            CreatedAt = customer.CreatedAt
         };
     }
 }

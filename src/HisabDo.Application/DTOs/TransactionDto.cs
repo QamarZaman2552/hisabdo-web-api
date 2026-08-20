@@ -13,4 +13,5 @@ public class TransactionDto
     public decimal Amount { get; set; }
     public string Note { get; set; } = string.Empty;
     public DateTime TransactionDate { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

@@ -82,7 +82,8 @@ public class CategoryService(ICategoryRepository repository) : ICategoryService
         {
             Id = category.Id,
             Name = category.Name,
-            IsDefault = category.IsDefault
+            IsDefault = category.IsDefault,
+            CreatedAt = category.CreatedAt
         };
     }
 }
