@@ -404,4 +404,15 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 - **DTO improvements**: `CreatedAt` added to transaction, customer and category responses for better UI ordering/display.
 - Verified via automated HTTP tests: future date -> 400, bad amount -> 400, missing category -> 400, missing customer -> 404, no token -> 401, valid create -> 201.
 
+### Swagger - Day 18-20
+
+![Swagger 1](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20212413.png)
+![Swagger 2](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20212959.png)
+![Swagger 3](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20213010.png)
+![Swagger 4](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20213128.png)
+![Swagger 5](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20213143.png)
+![Swagger 6](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20213227.png)
+![Swagger 7](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20213329.png)
+![Swagger 8](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20213504.png)
+
 
