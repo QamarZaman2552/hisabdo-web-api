@@ -63,14 +63,14 @@ public class TransactionRepository(HisabDoDbContext context) : ITransactionRepos
             .FirstOrDefaultAsync(t => t.Id == id && !t.IsDeleted);
     }
 
-    public async Task<bool> CustomerExistsAsync(int customerId)
+    public async Task<bool> CustomerExistsAsync(int userId, int customerId)
     {
-        return await context.Customers.AnyAsync(c => c.Id == customerId && !c.IsDeleted);
+        return await context.Customers.AnyAsync(c => c.Id == customerId && c.UserId == userId && !c.IsDeleted);
     }
 
-    public async Task<bool> CategoryExistsAsync(int categoryId)
+    public async Task<bool> CategoryExistsAsync(int userId, int categoryId)
     {
-        return await context.Categories.AnyAsync(c => c.Id == categoryId);
+        return await context.Categories.AnyAsync(c => c.Id == categoryId && c.UserId == userId && !c.IsDeleted);
     }
 
     public async Task<Transaction> AddAsync(Transaction transaction)

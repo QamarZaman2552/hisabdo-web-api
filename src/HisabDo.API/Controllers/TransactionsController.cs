@@ -47,7 +47,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateTransaction(int id, [FromBody] CreateTransactionDto transactionDto)
     {
-        var transaction = await transactionService.UpdateAsync(id, transactionDto);
+        var transaction = await transactionService.UpdateAsync(User.GetUserId(), id, transactionDto);
 
         return Ok(transaction);
     }
@@ -55,7 +55,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteTransaction(int id)
     {
-        await transactionService.DeleteAsync(id);
+        await transactionService.DeleteAsync(User.GetUserId(), id);
 
         return NoContent();
     }

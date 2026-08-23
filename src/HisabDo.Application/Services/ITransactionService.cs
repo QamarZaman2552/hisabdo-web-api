@@ -8,6 +8,6 @@ public interface ITransactionService
     Task<IEnumerable<TransactionDto>> GetByCategoryAsync(int userId, int categoryId);
     Task<TransactionDto?> GetByIdAsync(int id);
     Task<TransactionDto> CreateAsync(int userId, CreateTransactionDto dto);
-    Task<TransactionDto> UpdateAsync(int id, CreateTransactionDto dto);
-    Task DeleteAsync(int id);
+    Task<TransactionDto> UpdateAsync(int userId, int id, CreateTransactionDto dto);
+    Task DeleteAsync(int userId, int id);
 }

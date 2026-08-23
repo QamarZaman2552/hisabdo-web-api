@@ -13,16 +13,18 @@ public class AuthService(
     {
         PasswordPolicy.Validate(dto.Password);
 
-        if (await repository.EmailExistsAsync(dto.Email))
+        var email = dto.Email.ToLowerInvariant();
+
+        if (await repository.EmailExistsAsync(email))
         {
-            throw new InvalidOperationException($"An account with the email '{dto.Email}' already exists.");
+            throw new InvalidOperationException($"An account with the email '{email}' already exists.");
         }
 
         var user = new User
         {
             FullName = dto.FullName,
             BusinessName = dto.BusinessName,
-            Email = dto.Email,
+            Email = email,
             Phone = dto.Phone,
             PasswordHash = passwordHasher.Hash(dto.Password),
             Role = "User"
@@ -74,6 +76,11 @@ public class AuthService(
         if (!passwordHasher.Verify(dto.OldPassword, user.PasswordHash))
         {
             throw new UnauthorizedAccessException("Current password is incorrect.");
+        }
+
+        if (dto.OldPassword == dto.NewPassword)
+        {
+            throw new InvalidOperationException("New password must be different from current password.");
         }
 
         PasswordPolicy.Validate(dto.NewPassword);

@@ -28,6 +28,7 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
     public async Task<List<User>> GetUsersAsync()
     {
         return await context.Users
+            .Where(u => !u.IsDeleted)
             .OrderBy(u => u.CreatedAt)
             .ToListAsync();
     }

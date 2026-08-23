@@ -9,6 +9,11 @@ public static class ClaimsPrincipalExtensions
     {
         var value = user.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
-        return value != null && int.TryParse(value, out var userId) ? userId : 0;
+        if (value == null || !int.TryParse(value, out var userId))
+        {
+            throw new UnauthorizedAccessException("User ID not found in token.");
+        }
+
+        return userId;
     }
 }

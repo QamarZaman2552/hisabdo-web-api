@@ -11,7 +11,7 @@ public class ReportRepository(HisabDoDbContext context) : IReportRepository
     public async Task<ReportSummaryDto> GetSummaryAsync(int userId, DateTime monthStart)
     {
         var totals = await context.Transactions
-            .Where(t => t.UserId == userId)
+            .Where(t => t.UserId == userId && !t.IsDeleted)
             .GroupBy(t => 1)
             .Select(g => new
             {
@@ -22,7 +22,7 @@ public class ReportRepository(HisabDoDbContext context) : IReportRepository
             .FirstOrDefaultAsync();
 
         var monthTotals = await context.Transactions
-            .Where(t => t.UserId == userId && t.TransactionDate >= monthStart)
+            .Where(t => t.UserId == userId && !t.IsDeleted && t.TransactionDate >= monthStart)
             .GroupBy(t => 1)
             .Select(g => new
             {
@@ -34,8 +34,8 @@ public class ReportRepository(HisabDoDbContext context) : IReportRepository
 
         return new ReportSummaryDto
         {
-            TotalCustomers = await context.Customers.CountAsync(c => c.UserId == userId),
-            TotalCategories = await context.Categories.CountAsync(c => c.UserId == userId),
+            TotalCustomers = await context.Customers.CountAsync(c => c.UserId == userId && !c.IsDeleted),
+            TotalCategories = await context.Categories.CountAsync(c => c.UserId == userId && !c.IsDeleted),
             TotalTransactions = totals?.Count ?? 0,
             TotalReceivable = totals?.Receivable ?? 0,
             TotalPayable = totals?.Payable ?? 0,
@@ -49,7 +49,7 @@ public class ReportRepository(HisabDoDbContext context) : IReportRepository
     public async Task<List<CategoryReportDto>> GetCategoryBreakdownAsync(int userId)
     {
         return await context.Transactions
-            .Where(t => t.UserId == userId)
+            .Where(t => t.UserId == userId && !t.IsDeleted)
             .GroupBy(t => new { t.CategoryId, t.Category!.Name })
             .Select(g => new CategoryReportDto
             {

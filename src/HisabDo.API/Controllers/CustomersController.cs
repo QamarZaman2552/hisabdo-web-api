@@ -41,7 +41,7 @@ public class CustomersController(ICustomerService customerService) : ControllerB
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateCustomer(int id, [FromBody] CreateCustomerDto customerDto)
     {
-        var customer = await customerService.UpdateAsync(id, customerDto);
+        var customer = await customerService.UpdateAsync(User.GetUserId(), id, customerDto);
 
         return Ok(customer);
     }
@@ -49,7 +49,7 @@ public class CustomersController(ICustomerService customerService) : ControllerB
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteCustomer(int id)
     {
-        await customerService.DeleteAsync(id);
+        await customerService.DeleteAsync(User.GetUserId(), id);
 
         return NoContent();
     }

@@ -415,4 +415,16 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 ![Swagger 7](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20213329.png)
 ![Swagger 8](screenshots/Day-18-20-Task/Swagger_Day_18-20/Screenshot%202026-08-20%20213504.png)
 
+## Bug Fixes (Day 21-22)
+
+- **BOLA security fix** — all CRUD endpoints now verify resource ownership (userId check on update/delete)
+- **Invalid token handling** — `GetUserId()` now throws `UnauthorizedAccessException` instead of returning 0
+- **Soft-delete filters** — reports and admin list now exclude soft-deleted records
+- **Cross-user protection** — transactions can only reference the user's own customers/categories
+- **Exception messages** — production mode hides internal error details; only shows generic messages
+- **RFC type URLs** — ProblemDetails now returns correct type for each status code
+- **Email normalization** — registration stores emails in lowercase
+- **Same password check** — changing to the same password is now rejected
+- **Race condition protection** — category creation catches database constraint violations
+
 

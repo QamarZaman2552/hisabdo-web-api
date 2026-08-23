@@ -29,14 +29,27 @@ public class CategoryService(ICategoryRepository repository) : ICategoryService
             IsDefault = false
         };
 
-        await repository.AddAsync(category);
+        try
+        {
+            await repository.AddAsync(category);
+        }
+        catch (Exception)
+        {
+            throw new InvalidOperationException($"A category with the name '{dto.Name}' already exists.");
+        }
+
         return ToDto(category);
     }
 
-    public async Task<CategoryDto> UpdateAsync(int id, CreateCategoryDto dto)
+    public async Task<CategoryDto> UpdateAsync(int userId, int id, CreateCategoryDto dto)
     {
         var category = await repository.GetByIdAsync(id)
             ?? throw new KeyNotFoundException($"No category found with ID: {id}");
+
+        if (category.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("You do not have access to this category.");
+        }
 
         if (category.IsDefault)
         {
@@ -50,10 +63,15 @@ public class CategoryService(ICategoryRepository repository) : ICategoryService
         return ToDto(category);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(int userId, int id)
     {
         var category = await repository.GetByIdAsync(id)
             ?? throw new KeyNotFoundException($"No category found with ID: {id}");
+
+        if (category.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("You do not have access to this category.");
+        }
 
         if (category.IsDefault)
         {

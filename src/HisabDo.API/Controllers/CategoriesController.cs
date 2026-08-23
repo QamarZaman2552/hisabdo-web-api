@@ -41,7 +41,7 @@ public class CategoriesController(ICategoryService categoryService) : Controller
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateCategory(int id, [FromBody] CreateCategoryDto categoryDto)
     {
-        var category = await categoryService.UpdateAsync(id, categoryDto);
+        var category = await categoryService.UpdateAsync(User.GetUserId(), id, categoryDto);
 
         return Ok(category);
     }
@@ -49,7 +49,7 @@ public class CategoriesController(ICategoryService categoryService) : Controller
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteCategory(int id)
     {
-        await categoryService.DeleteAsync(id);
+        await categoryService.DeleteAsync(User.GetUserId(), id);
 
         return NoContent();
     }

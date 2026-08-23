@@ -14,7 +14,7 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
 
     public async Task<IEnumerable<TransactionDto>> GetByCategoryAsync(int userId, int categoryId)
     {
-        if (!await repository.CategoryExistsAsync(categoryId))
+        if (!await repository.CategoryExistsAsync(userId, categoryId))
         {
             throw new KeyNotFoundException($"No category found with ID: {categoryId}");
         }
@@ -31,7 +31,7 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
 
     public async Task<TransactionDto> CreateAsync(int userId, CreateTransactionDto dto)
     {
-        await EnsureCustomerAndCategoryExistAsync(dto.CustomerId, dto.CategoryId);
+        await EnsureCustomerAndCategoryExistAsync(userId, dto.CustomerId, dto.CategoryId);
         EnsureDateIsNotInFuture(dto.TransactionDate);
 
         var transaction = new Transaction
@@ -49,12 +49,17 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
         return await GetByIdAsync(transaction.Id) ?? ToDto(transaction);
     }
 
-    public async Task<TransactionDto> UpdateAsync(int id, CreateTransactionDto dto)
+    public async Task<TransactionDto> UpdateAsync(int userId, int id, CreateTransactionDto dto)
     {
         var transaction = await repository.GetByIdAsync(id)
             ?? throw new KeyNotFoundException($"No transaction found with ID: {id}");
 
-        await EnsureCustomerAndCategoryExistAsync(dto.CustomerId, dto.CategoryId);
+        if (transaction.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("You do not have access to this transaction.");
+        }
+
+        await EnsureCustomerAndCategoryExistAsync(userId, dto.CustomerId, dto.CategoryId);
         EnsureDateIsNotInFuture(dto.TransactionDate);
 
         transaction.CustomerId = dto.CustomerId;
@@ -68,22 +73,27 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
         return await GetByIdAsync(id) ?? ToDto(transaction);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(int userId, int id)
     {
         var transaction = await repository.GetByIdAsync(id)
             ?? throw new KeyNotFoundException($"No transaction found with ID: {id}");
 
+        if (transaction.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("You do not have access to this transaction.");
+        }
+
         await repository.RemoveAsync(transaction);
     }
 
-    private async Task EnsureCustomerAndCategoryExistAsync(int customerId, int categoryId)
+    private async Task EnsureCustomerAndCategoryExistAsync(int userId, int customerId, int categoryId)
     {
-        if (!await repository.CustomerExistsAsync(customerId))
+        if (!await repository.CustomerExistsAsync(userId, customerId))
         {
             throw new InvalidOperationException($"No customer found with ID: {customerId}.");
         }
 
-        if (!await repository.CategoryExistsAsync(categoryId))
+        if (!await repository.CategoryExistsAsync(userId, categoryId))
         {
             throw new InvalidOperationException($"No category found with ID: {categoryId}.");
         }
