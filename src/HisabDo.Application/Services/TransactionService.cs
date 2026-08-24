@@ -92,6 +92,20 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
         await repository.RemoveAsync(transaction);
     }
 
+    public async Task UpdateAttachmentUrlAsync(int userId, int transactionId, string attachmentUrl)
+    {
+        var transaction = await repository.GetByIdAsync(transactionId)
+            ?? throw new KeyNotFoundException($"No transaction found with ID: {transactionId}");
+
+        if (transaction.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("You do not have access to this transaction.");
+        }
+
+        transaction.AttachmentUrl = attachmentUrl;
+        await repository.UpdateAsync(transaction);
+    }
+
     private async Task EnsureCustomerAndCategoryExistAsync(int userId, int customerId, int categoryId)
     {
         if (!await repository.CustomerExistsAsync(userId, customerId))
@@ -126,7 +140,8 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
             Amount = transaction.Amount,
             Note = transaction.Note,
             TransactionDate = transaction.TransactionDate,
-            CreatedAt = transaction.CreatedAt
+            CreatedAt = transaction.CreatedAt,
+            AttachmentUrl = transaction.AttachmentUrl
         };
     }
 }

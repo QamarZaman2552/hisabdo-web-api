@@ -6,6 +6,7 @@ namespace HisabDo.Application.Services;
 
 public class AuthService(
     IUserRepository repository,
+    ICategoryRepository categoryRepository,
     IPasswordHasher passwordHasher,
     ITokenService tokenService) : IAuthService
 {
@@ -31,6 +32,22 @@ public class AuthService(
         };
 
         await repository.AddAsync(user);
+
+        var defaultCategories = new[]
+        {
+            "Sales", "Purchase", "Rent", "Food", "Transport", "Salary", "Others"
+        };
+
+        foreach (var name in defaultCategories)
+        {
+            await categoryRepository.AddAsync(new Category
+            {
+                UserId = user.Id,
+                Name = name,
+                IsDefault = true
+            });
+        }
+
         return ToAuthResponse(user);
     }
 

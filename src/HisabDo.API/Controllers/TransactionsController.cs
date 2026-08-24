@@ -59,4 +59,37 @@ public class TransactionsController(ITransactionService transactionService) : Co
 
         return NoContent();
     }
+
+    [HttpPost("{id:int}/attachment")]
+    [RequestSizeLimit(10 * 1024 * 1024)]
+    public async Task<IActionResult> UploadAttachment(int id, IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest(new { message = "No file uploaded." });
+        }
+
+        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".pdf", ".gif" };
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+        if (!allowedExtensions.Contains(ext))
+        {
+            return BadRequest(new { message = "Only jpg, jpeg, png, gif, and pdf files are allowed." });
+        }
+
+        var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+        Directory.CreateDirectory(uploadsDir);
+
+        var fileName = $"{Guid.NewGuid()}{ext}";
+        var filePath = Path.Combine(uploadsDir, fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        var attachmentUrl = $"/uploads/{fileName}";
+        await transactionService.UpdateAttachmentUrlAsync(User.GetUserId(), id, attachmentUrl);
+
+        return Ok(new { attachmentUrl, fileName });
+    }
 }

@@ -52,6 +52,7 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
             entity.HasKey(t => t.Id);
             entity.Property(t => t.Amount).HasColumnType("decimal(18,2)");
             entity.Property(t => t.Note).HasMaxLength(500);
+            entity.Property(t => t.AttachmentUrl).HasMaxLength(500);
             entity.HasIndex(t => t.UserId);
             entity.HasIndex(t => new { t.UserId, t.TransactionDate });
             entity.HasIndex(t => new { t.UserId, t.Type });

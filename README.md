@@ -462,4 +462,19 @@ All list endpoints now return:
 
 Returns `429 Too Many Requests` when exceeded.
 
+## File Attachment Upload
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/v1/transactions/{id}/attachment | Upload image (jpg/png/gif) or PDF, max 10MB |
+
+- Allowed extensions: `.jpg`, `.jpeg`, `.png`, `.gif`, `.pdf`
+- Files stored in `wwwroot/uploads/` with GUID filenames
+- Returns `{ "attachmentUrl": "/uploads/{guid}.png", "fileName": "..." }`
+- `AttachmentUrl` field included in all transaction responses
+
+## Default Categories on Registration
+
+New users automatically get 7 default categories: Sales, Purchase, Rent, Food, Transport, Salary, Others.
+
 

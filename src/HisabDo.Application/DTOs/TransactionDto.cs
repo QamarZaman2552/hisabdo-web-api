@@ -14,4 +14,5 @@ public class TransactionDto
     public string Note { get; set; } = string.Empty;
     public DateTime TransactionDate { get; set; }
     public DateTime CreatedAt { get; set; }
+    public string? AttachmentUrl { get; set; }
 }
