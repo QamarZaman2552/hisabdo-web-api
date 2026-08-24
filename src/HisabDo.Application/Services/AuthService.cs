@@ -36,16 +36,21 @@ public class AuthService(
         var defaultCategories = new[]
         {
             "Sales", "Purchase", "Rent", "Food", "Transport", "Salary", "Others"
-        };
-
-        foreach (var name in defaultCategories)
+        }.Select(name => new Category
         {
-            await categoryRepository.AddAsync(new Category
-            {
-                UserId = user.Id,
-                Name = name,
-                IsDefault = true
-            });
+            UserId = user.Id,
+            Name = name,
+            IsDefault = true
+        });
+
+        try
+        {
+            await categoryRepository.AddRangeAsync(defaultCategories);
+        }
+        catch
+        {
+            await repository.DeleteAsync(user.Id);
+            throw new InvalidOperationException("Failed to create default categories. Please try again.");
         }
 
         return ToAuthResponse(user);

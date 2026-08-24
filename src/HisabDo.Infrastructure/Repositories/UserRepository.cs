@@ -45,4 +45,15 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
         context.Users.Update(user);
         await context.SaveChangesAsync();
     }
+
+    public async Task DeleteAsync(int userId)
+    {
+        var user = await context.Users.FindAsync(userId);
+        if (user != null)
+        {
+            user.IsDeleted = true;
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
+        }
+    }
 }

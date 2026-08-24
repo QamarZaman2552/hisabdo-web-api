@@ -61,6 +61,19 @@ public class CategoryRepository(HisabDoDbContext context) : ICategoryRepository
         return category;
     }
 
+    public async Task AddRangeAsync(IEnumerable<Category> categories)
+    {
+        context.Categories.AddRange(categories);
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. Please try again.");
+        }
+    }
+
     public async Task<Category> UpdateAsync(Category category)
     {
         context.Categories.Update(category);

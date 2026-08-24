@@ -10,6 +10,7 @@ public interface IUserRepository
     Task<List<User>> GetUsersAsync();
     Task<User> AddAsync(User user);
     Task UpdateAsync(User user);
+    Task DeleteAsync(int userId);
 }
 
 public interface ISettingRepository

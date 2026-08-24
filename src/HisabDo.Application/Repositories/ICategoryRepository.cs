@@ -9,6 +9,7 @@ public interface ICategoryRepository
     Task<bool> NameExistsAsync(int userId, string name, int? excludeId = null);
     Task<bool> HasTransactionsAsync(int id);
     Task<Category> AddAsync(Category category);
+    Task AddRangeAsync(IEnumerable<Category> categories);
     Task<Category> UpdateAsync(Category category);
     Task RemoveAsync(Category category);
 }

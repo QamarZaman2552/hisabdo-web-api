@@ -11,4 +11,5 @@ public interface ITransactionService
     Task<TransactionDto> UpdateAsync(int userId, int id, CreateTransactionDto dto);
     Task DeleteAsync(int userId, int id);
     Task UpdateAttachmentUrlAsync(int userId, int transactionId, string attachmentUrl);
+    Task<string?> GetAttachmentUrlAsync(int userId, int transactionId);
 }

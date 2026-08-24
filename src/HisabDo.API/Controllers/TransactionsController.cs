@@ -82,14 +82,30 @@ public class TransactionsController(ITransactionService transactionService) : Co
         var fileName = $"{Guid.NewGuid()}{ext}";
         var filePath = Path.Combine(uploadsDir, fileName);
 
+        var existingUrl = await transactionService.GetAttachmentUrlAsync(User.GetUserId(), id);
+
         using (var stream = new FileStream(filePath, FileMode.Create))
         {
             await file.CopyToAsync(stream);
         }
 
-        var attachmentUrl = $"/uploads/{fileName}";
-        await transactionService.UpdateAttachmentUrlAsync(User.GetUserId(), id, attachmentUrl);
+        try
+        {
+            var attachmentUrl = $"/uploads/{fileName}";
+            await transactionService.UpdateAttachmentUrlAsync(User.GetUserId(), id, attachmentUrl);
+        }
+        catch
+        {
+            if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
+            throw;
+        }
 
-        return Ok(new { attachmentUrl, fileName });
+        if (!string.IsNullOrEmpty(existingUrl))
+        {
+            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingUrl.TrimStart('/'));
+            if (System.IO.File.Exists(oldFilePath)) System.IO.File.Delete(oldFilePath);
+        }
+
+        return Ok(new { attachmentUrl = $"/uploads/{fileName}", fileName });
     }
 }

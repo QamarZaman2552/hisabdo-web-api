@@ -89,6 +89,15 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
             throw new UnauthorizedAccessException("You do not have access to this transaction.");
         }
 
+        if (!string.IsNullOrEmpty(transaction.AttachmentUrl))
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", transaction.AttachmentUrl.TrimStart('/'));
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
+
         await repository.RemoveAsync(transaction);
     }
 
@@ -104,6 +113,19 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
 
         transaction.AttachmentUrl = attachmentUrl;
         await repository.UpdateAsync(transaction);
+    }
+
+    public async Task<string?> GetAttachmentUrlAsync(int userId, int transactionId)
+    {
+        var transaction = await repository.GetByIdAsync(transactionId)
+            ?? throw new KeyNotFoundException($"No transaction found with ID: {transactionId}");
+
+        if (transaction.UserId != userId)
+        {
+            throw new UnauthorizedAccessException("You do not have access to this transaction.");
+        }
+
+        return transaction.AttachmentUrl;
     }
 
     private async Task EnsureCustomerAndCategoryExistAsync(int userId, int customerId, int categoryId)
