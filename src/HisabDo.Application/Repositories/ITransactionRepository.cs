@@ -5,7 +5,7 @@ namespace HisabDo.Application.Repositories;
 
 public interface ITransactionRepository
 {
-    Task<List<Transaction>> GetAllAsync(int userId, TransactionFilterDto filter);
+    Task<(List<Transaction> Items, int TotalCount)> GetAllAsync(int userId, TransactionFilterDto filter);
     Task<List<Transaction>> GetByCategoryAsync(int userId, int categoryId);
     Task<Transaction?> GetByIdAsync(int id);
     Task<bool> CustomerExistsAsync(int userId, int customerId);

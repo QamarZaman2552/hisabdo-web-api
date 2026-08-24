@@ -26,12 +26,12 @@ To call protected endpoints in **Swagger**: click **Authorize**, paste `Bearer <
 
 # Day 15-16 - Reports, Database Improvements & Finalized Auth (Complete)
 
-## Reports / Dashboard (new)
+## Reports / Dashboard
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/v1/reports/summary | Dashboard totals: customers, categories, transactions, receivable, payable, balance + this month's received/paid (requires token) |
-| GET | /api/v1/reports/by-category | Per-category breakdown: transaction count + receivable/payable totals (requires token) |
+| GET | /api/v1/reports/summary?period=week\|month\|3months\|year | Dashboard totals with period filter (requires token) |
+| GET | /api/v1/reports/by-category | Per-category breakdown (requires token) |
 
 ## Database improvements
 
@@ -107,39 +107,34 @@ All business tables have `UserId` and use soft delete (`IsDeleted`).
 
 ## Working CRUD Modules
 
-### Customers (Day 9)
+### Customers
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/v1/customers | List all customers |
+| GET | /api/v1/customers?page=1&pageSize=50 | List all customers (paginated) |
 | GET | /api/v1/customers/{id} | Get customer by ID |
 | POST | /api/v1/customers | Add customer |
 | PUT | /api/v1/customers/{id} | Update customer |
 | DELETE | /api/v1/customers/{id} | Delete customer (soft) |
 
-### Transactions (Day 9 + Day 11)
+### Transactions
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/v1/transactions | List transactions with filters (type, customerId, categoryId, fromDate, toDate) |
-| GET | /api/v1/categories/{id}/transactions | List transactions of one category (relationship endpoint) |
+| GET | /api/v1/transactions?Search=&Page=1&PageSize=50 | List transactions (paginated + search) |
+| GET | /api/v1/transactions?Type=1&CustomerId=1&CategoryId=1&FromDate=&ToDate= | Filter by type, customer, category, date range |
+| GET | /api/v1/categories/{id}/transactions | List transactions of one category |
 | GET | /api/v1/transactions/{id} | Get transaction by ID |
 | POST | /api/v1/transactions | Add Receivable/Payable |
 | PUT | /api/v1/transactions/{id} | Update transaction |
 | DELETE | /api/v1/transactions/{id} | Delete transaction (soft) |
 
-Day 11 - the Transactions module was completed as the second core module with the Category relation:
-- `Category` (first module) has one-to-many relationship with `Transaction` (second module): one category has many transactions.
-- Database relationship: `Transactions.CategoryId` foreign key with `DeleteBehavior.Restrict` (category used by transactions cannot be deleted).
-- New relationship endpoint: `GET /api/v1/categories/{id}/transactions`.
-- New query filters on the list API: `type` (1 = Receivable, 2 = Payable), `customerId`, `categoryId`, `fromDate`, `toDate`.
-
-### Categories (Day 10)
+### Categories
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | /api/v1/categories | List all categories |
-| GET | /api/v1/categories/{id} | Get category by ID |
+| GET | /api/v1/categories?page=1&pageSize=50 | List all categories (paginated) |
+| GET | /api/v1/categories/{id} | Get category by ID (ownership verified) |
 | POST | /api/v1/categories | Add category |
 | PUT | /api/v1/categories/{id} | Update category |
 | DELETE | /api/v1/categories/{id} | Delete category (soft) |
@@ -426,5 +421,45 @@ To call protected endpoints in Swagger click **Authorize** and paste `Bearer <to
 - **Email normalization** — registration stores emails in lowercase
 - **Same password check** — changing to the same password is now rejected
 - **Race condition protection** — category creation catches database constraint violations
+
+# Day 22-24 - Backend Stabilization (Complete)
+
+## Bug Fixes (Additional)
+
+- **Category BOLA fix (Bug 12)** — `GetByIdAsync` now filters by both userId AND id; cross-user category access returns 404
+- **Rate limiting (Bug 13/14)** — ASP.NET Core built-in rate limiting: 100 req/min (general), 10 req/min (auth endpoints). Returns 429 Too Many Requests
+- **JWT secret validation (Bug 15)** — Startup check: minimum 32 characters required, warns if default value detected
+- **Concurrency handling (Bug 16)** — All repository SaveChanges wrapped in try-catch for `DbUpdateConcurrencyException`
+- **Pagination (Bug 17)** — All list endpoints now support `?page=&pageSize=` query params. Response wrapped in `PaginatedResult<T>` with `items`, `page`, `pageSize`, `totalCount`, `totalPages`, `hasNext`, `hasPrevious`
+
+## New Features
+
+- **Transaction search** — `GET /transactions?Search=text` filters by note content and customer name
+- **Report period filters** — `GET /reports/summary?period=week|month|3months|year` for flexible reporting
+
+## Pagination Format
+
+All list endpoints now return:
+
+```json
+{
+  "items": [...],
+  "page": 1,
+  "pageSize": 50,
+  "totalCount": 120,
+  "totalPages": 3,
+  "hasPrevious": false,
+  "hasNext": true
+}
+```
+
+## Rate Limiting
+
+| Policy | Limit | Window | Queue |
+|--------|-------|--------|-------|
+| `fixed` (default) | 100 requests | 1 minute | 10 |
+| `auth` (login/register) | 10 requests | 1 minute | 0 |
+
+Returns `429 Too Many Requests` when exceeded.
 
 

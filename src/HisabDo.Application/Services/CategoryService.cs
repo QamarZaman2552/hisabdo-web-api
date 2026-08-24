@@ -6,15 +6,21 @@ namespace HisabDo.Application.Services;
 
 public class CategoryService(ICategoryRepository repository) : ICategoryService
 {
-    public async Task<IEnumerable<CategoryDto>> GetAllAsync(int userId)
+    public async Task<PaginatedResult<CategoryDto>> GetAllAsync(int userId, int page = 1, int pageSize = 50)
     {
-        var categories = await repository.GetAllAsync(userId);
-        return categories.Select(ToDto);
+        var (categories, totalCount) = await repository.GetAllAsync(userId, page, pageSize);
+        return new PaginatedResult<CategoryDto>
+        {
+            Items = categories.Select(ToDto).ToList(),
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount
+        };
     }
 
-    public async Task<CategoryDto?> GetByIdAsync(int id)
+    public async Task<CategoryDto?> GetByIdAsync(int userId, int id)
     {
-        var category = await repository.GetByIdAsync(id);
+        var category = await repository.GetByIdAsync(userId, id);
         return category == null ? null : ToDto(category);
     }
 
@@ -43,13 +49,8 @@ public class CategoryService(ICategoryRepository repository) : ICategoryService
 
     public async Task<CategoryDto> UpdateAsync(int userId, int id, CreateCategoryDto dto)
     {
-        var category = await repository.GetByIdAsync(id)
+        var category = await repository.GetByIdAsync(userId, id)
             ?? throw new KeyNotFoundException($"No category found with ID: {id}");
-
-        if (category.UserId != userId)
-        {
-            throw new UnauthorizedAccessException("You do not have access to this category.");
-        }
 
         if (category.IsDefault)
         {
@@ -65,13 +66,8 @@ public class CategoryService(ICategoryRepository repository) : ICategoryService
 
     public async Task DeleteAsync(int userId, int id)
     {
-        var category = await repository.GetByIdAsync(id)
+        var category = await repository.GetByIdAsync(userId, id)
             ?? throw new KeyNotFoundException($"No category found with ID: {id}");
-
-        if (category.UserId != userId)
-        {
-            throw new UnauthorizedAccessException("You do not have access to this category.");
-        }
 
         if (category.IsDefault)
         {

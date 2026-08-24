@@ -8,7 +8,7 @@ namespace HisabDo.Infrastructure.Repositories;
 
 public class TransactionRepository(HisabDoDbContext context) : ITransactionRepository
 {
-    public async Task<List<Transaction>> GetAllAsync(int userId, TransactionFilterDto filter)
+    public async Task<(List<Transaction> Items, int TotalCount)> GetAllAsync(int userId, TransactionFilterDto filter)
     {
         var query = context.Transactions
             .Where(t => t.UserId == userId && !t.IsDeleted);
@@ -38,11 +38,27 @@ public class TransactionRepository(HisabDoDbContext context) : ITransactionRepos
             query = query.Where(t => t.TransactionDate <= filter.ToDate.Value);
         }
 
-        return await query
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+        {
+            var search = filter.Search.ToLower();
+            query = query.Where(t => t.Note.ToLower().Contains(search)
+                || (t.Customer != null && t.Customer.Name.ToLower().Contains(search)));
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var page = Math.Max(1, filter.Page);
+        var pageSize = Math.Clamp(filter.PageSize, 1, 100);
+
+        var items = await query
             .Include(t => t.Customer)
             .Include(t => t.Category)
             .OrderByDescending(t => t.TransactionDate)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        return (items, totalCount);
     }
 
     public async Task<List<Transaction>> GetByCategoryAsync(int userId, int categoryId)
@@ -76,14 +92,28 @@ public class TransactionRepository(HisabDoDbContext context) : ITransactionRepos
     public async Task<Transaction> AddAsync(Transaction transaction)
     {
         context.Transactions.Add(transaction);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. Please try again.");
+        }
         return transaction;
     }
 
     public async Task<Transaction> UpdateAsync(Transaction transaction)
     {
         context.Transactions.Update(transaction);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. The record was modified by another user. Please refresh and try again.");
+        }
         return transaction;
     }
 
@@ -91,6 +121,13 @@ public class TransactionRepository(HisabDoDbContext context) : ITransactionRepos
     {
         transaction.IsDeleted = true;
         context.Transactions.Update(transaction);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. Please try again.");
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace HisabDo.API.Controllers;
 public class TransactionsController(ITransactionService transactionService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TransactionDto>>> GetAllTransactions([FromQuery] TransactionFilterDto filter)
+    public async Task<ActionResult<PaginatedResult<TransactionDto>>> GetAllTransactions([FromQuery] TransactionFilterDto filter)
     {
         return Ok(await transactionService.GetAllAsync(User.GetUserId(), filter));
     }

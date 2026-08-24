@@ -4,7 +4,7 @@ namespace HisabDo.Application.Services;
 
 public interface ITransactionService
 {
-    Task<IEnumerable<TransactionDto>> GetAllAsync(int userId, TransactionFilterDto filter);
+    Task<PaginatedResult<TransactionDto>> GetAllAsync(int userId, TransactionFilterDto filter);
     Task<IEnumerable<TransactionDto>> GetByCategoryAsync(int userId, int categoryId);
     Task<TransactionDto?> GetByIdAsync(int id);
     Task<TransactionDto> CreateAsync(int userId, CreateTransactionDto dto);

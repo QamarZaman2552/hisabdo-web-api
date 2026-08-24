@@ -12,15 +12,17 @@ namespace HisabDo.API.Controllers;
 public class CategoriesController(ICategoryService categoryService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAllCategories()
+    public async Task<ActionResult<PaginatedResult<CategoryDto>>> GetAllCategories(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 50)
     {
-        return Ok(await categoryService.GetAllAsync(User.GetUserId()));
+        return Ok(await categoryService.GetAllAsync(User.GetUserId(), page, pageSize));
     }
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<CategoryDto>> GetCategoryById(int id)
     {
-        var category = await categoryService.GetByIdAsync(id);
+        var category = await categoryService.GetByIdAsync(User.GetUserId(), id);
 
         if (category == null)
         {

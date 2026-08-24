@@ -7,12 +7,23 @@ namespace HisabDo.Infrastructure.Repositories;
 
 public class CustomerRepository(HisabDoDbContext context) : ICustomerRepository
 {
-    public async Task<List<Customer>> GetAllAsync(int userId)
+    public async Task<(List<Customer> Items, int TotalCount)> GetAllAsync(int userId, int page = 1, int pageSize = 50)
     {
-        return await context.Customers
-            .Where(c => c.UserId == userId && !c.IsDeleted)
+        var query = context.Customers
+            .Where(c => c.UserId == userId && !c.IsDeleted);
+
+        var totalCount = await query.CountAsync();
+
+        page = Math.Max(1, page);
+        pageSize = Math.Clamp(pageSize, 1, 100);
+
+        var items = await query
             .OrderBy(c => c.Name)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        return (items, totalCount);
     }
 
     public async Task<Customer?> GetByIdAsync(int id)
@@ -24,14 +35,28 @@ public class CustomerRepository(HisabDoDbContext context) : ICustomerRepository
     public async Task<Customer> AddAsync(Customer customer)
     {
         context.Customers.Add(customer);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. Please try again.");
+        }
         return customer;
     }
 
     public async Task<Customer> UpdateAsync(Customer customer)
     {
         context.Customers.Update(customer);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. The record was modified by another user. Please refresh and try again.");
+        }
         return customer;
     }
 
@@ -39,6 +64,13 @@ public class CustomerRepository(HisabDoDbContext context) : ICustomerRepository
     {
         customer.IsDeleted = true;
         context.Customers.Update(customer);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. Please try again.");
+        }
     }
 }

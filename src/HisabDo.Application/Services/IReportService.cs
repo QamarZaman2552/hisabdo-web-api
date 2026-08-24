@@ -4,6 +4,6 @@ namespace HisabDo.Application.Services;
 
 public interface IReportService
 {
-    Task<ReportSummaryDto> GetSummaryAsync(int userId);
+    Task<ReportSummaryDto> GetSummaryAsync(int userId, string? period = null);
     Task<List<CategoryReportDto>> GetCategoryBreakdownAsync(int userId);
 }

@@ -6,10 +6,16 @@ namespace HisabDo.Application.Services;
 
 public class CustomerService(ICustomerRepository repository) : ICustomerService
 {
-    public async Task<IEnumerable<CustomerDto>> GetAllAsync(int userId)
+    public async Task<PaginatedResult<CustomerDto>> GetAllAsync(int userId, int page = 1, int pageSize = 50)
     {
-        var customers = await repository.GetAllAsync(userId);
-        return customers.Select(ToDto);
+        var (customers, totalCount) = await repository.GetAllAsync(userId, page, pageSize);
+        return new PaginatedResult<CustomerDto>
+        {
+            Items = customers.Select(ToDto).ToList(),
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount
+        };
     }
 
     public async Task<CustomerDto?> GetByIdAsync(int id)

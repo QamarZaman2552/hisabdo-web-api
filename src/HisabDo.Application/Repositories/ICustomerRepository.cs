@@ -4,7 +4,7 @@ namespace HisabDo.Application.Repositories;
 
 public interface ICustomerRepository
 {
-    Task<List<Customer>> GetAllAsync(int userId);
+    Task<(List<Customer> Items, int TotalCount)> GetAllAsync(int userId, int page = 1, int pageSize = 50);
     Task<Customer?> GetByIdAsync(int id);
     Task<Customer> AddAsync(Customer customer);
     Task<Customer> UpdateAsync(Customer customer);

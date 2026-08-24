@@ -12,9 +12,11 @@ namespace HisabDo.API.Controllers;
 public class CustomersController(ICustomerService customerService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
+    public async Task<ActionResult<PaginatedResult<CustomerDto>>> GetAllCustomers(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 50)
     {
-        return Ok(await customerService.GetAllAsync(User.GetUserId()));
+        return Ok(await customerService.GetAllAsync(User.GetUserId(), page, pageSize));
     }
 
     [HttpGet("{id:int}")]

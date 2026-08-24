@@ -6,10 +6,16 @@ namespace HisabDo.Application.Services;
 
 public class TransactionService(ITransactionRepository repository) : ITransactionService
 {
-    public async Task<IEnumerable<TransactionDto>> GetAllAsync(int userId, TransactionFilterDto filter)
+    public async Task<PaginatedResult<TransactionDto>> GetAllAsync(int userId, TransactionFilterDto filter)
     {
-        var transactions = await repository.GetAllAsync(userId, filter);
-        return transactions.Select(ToDto);
+        var (transactions, totalCount) = await repository.GetAllAsync(userId, filter);
+        return new PaginatedResult<TransactionDto>
+        {
+            Items = transactions.Select(ToDto).ToList(),
+            Page = filter.Page,
+            PageSize = filter.PageSize,
+            TotalCount = totalCount
+        };
     }
 
     public async Task<IEnumerable<TransactionDto>> GetByCategoryAsync(int userId, int categoryId)

@@ -12,9 +12,9 @@ namespace HisabDo.API.Controllers;
 public class ReportsController(IReportService reportService) : ControllerBase
 {
     [HttpGet("summary")]
-    public async Task<ActionResult<ReportSummaryDto>> GetSummary()
+    public async Task<ActionResult<ReportSummaryDto>> GetSummary([FromQuery] string? period = null)
     {
-        return Ok(await reportService.GetSummaryAsync(User.GetUserId()));
+        return Ok(await reportService.GetSummaryAsync(User.GetUserId(), period));
     }
 
     [HttpGet("by-category")]
