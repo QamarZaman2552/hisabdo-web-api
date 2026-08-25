@@ -519,4 +519,38 @@ New users automatically get 7 default categories: Sales, Purchase, Rent, Food, T
 - **Handover**: `docs/SQA-Handover.md` (full endpoint reference, test scenarios, credentials)
 - **Swagger**: `http://localhost:5181/swagger`
 
+### Swagger - Day 20-25
+
+![Swagger 1](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20153755.png)
+![Swagger 2](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20153825.png)
+![Swagger 3](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20154017.png)
+![Swagger 4](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20154031.png)
+![Swagger 5](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20154159.png)
+![Swagger 6](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20154426.png)
+![Swagger 7](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20154542.png)
+![Swagger 8](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20154632.png)
+![Swagger 9](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20154654.png)
+![Swagger 10](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20154855.png)
+![Swagger 11](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20154926.png)
+![Swagger 12](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20155017.png)
+![Swagger 13](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20155102.png)
+![Swagger 14](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20155219.png)
+![Swagger 15](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20155312.png)
+![Swagger 16](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20155442.png)
+![Swagger 17](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20155458.png)
+![Swagger 18](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20155649.png)
+![Swagger 19](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20155728.png)
+![Swagger 20](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20155952.png)
+![Swagger 21](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20160430.png)
+![Swagger 22](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20160533.png)
+![Swagger 23](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20160630.png)
+![Swagger 24](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20160646.png)
+![Swagger 25](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20160737.png)
+![Swagger 26](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20160802.png)
+![Swagger 27](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20160844.png)
+![Swagger 28](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20160926.png)
+![Swagger 29](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20160958.png)
+![Swagger 30](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20162433.png)
+![Swagger 31](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20164325.png)
+
 
