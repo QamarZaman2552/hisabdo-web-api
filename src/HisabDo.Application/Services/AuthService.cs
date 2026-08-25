@@ -7,6 +7,7 @@ namespace HisabDo.Application.Services;
 public class AuthService(
     IUserRepository repository,
     ICategoryRepository categoryRepository,
+    ISettingRepository settingRepository,
     IPasswordHasher passwordHasher,
     ITokenService tokenService) : IAuthService
 {
@@ -28,7 +29,9 @@ public class AuthService(
             Email = email,
             Phone = dto.Phone,
             PasswordHash = passwordHasher.Hash(dto.Password),
-            Role = "User"
+            Role = "User",
+            CurrencyCode = "PKR",
+            LanguageCode = "en"
         };
 
         await repository.AddAsync(user);
@@ -46,11 +49,12 @@ public class AuthService(
         try
         {
             await categoryRepository.AddRangeAsync(defaultCategories);
+            await settingRepository.AddOrUpdateAsync(new Setting { UserId = user.Id });
         }
         catch
         {
             await repository.DeleteAsync(user.Id);
-            throw new InvalidOperationException("Failed to create default categories. Please try again.");
+            throw new InvalidOperationException("Failed to create account defaults. Please try again.");
         }
 
         return ToAuthResponse(user);

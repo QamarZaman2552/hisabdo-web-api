@@ -17,7 +17,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
         return Ok(await transactionService.GetAllAsync(User.GetUserId(), filter));
     }
 
-    [HttpGet("~/api/v1/categories/{categoryId:int}/transactions")]
+    [HttpGet("~/api/v1/Categories/{categoryId:int}/transactions")]
     public async Task<ActionResult<IEnumerable<TransactionDto>>> GetTransactionsByCategory(int categoryId)
     {
         return Ok(await transactionService.GetByCategoryAsync(User.GetUserId(), categoryId));
