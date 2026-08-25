@@ -26,7 +26,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     [HttpGet("{id:int}")]
     public async Task<ActionResult<TransactionDto>> GetTransactionById(int id)
     {
-        var transaction = await transactionService.GetByIdAsync(id);
+        var transaction = await transactionService.GetByIdAsync(User.GetUserId(), id);
 
         if (transaction == null)
         {

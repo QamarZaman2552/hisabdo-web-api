@@ -65,6 +65,11 @@ public class AuthService(
         var user = await repository.GetByEmailAsync(dto.Email)
             ?? throw new UnauthorizedAccessException("Invalid email or password.");
 
+        if (user.IsDeleted)
+        {
+            throw new UnauthorizedAccessException("Invalid email or password.");
+        }
+
         if (!passwordHasher.Verify(dto.Password, user.PasswordHash))
         {
             throw new UnauthorizedAccessException("Invalid email or password.");
@@ -128,6 +133,11 @@ public class AuthService(
             Email = user.Email,
             Role = user.Role
         };
+    }
+
+    public async Task DeleteAccountAsync(int userId)
+    {
+        await repository.DeleteAsync(userId);
     }
 
     private static UserProfileDto ToProfile(User user)

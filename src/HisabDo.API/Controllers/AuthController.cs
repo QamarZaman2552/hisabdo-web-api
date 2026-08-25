@@ -51,4 +51,12 @@ public class AuthController(IAuthService authService) : ControllerBase
 
         return Ok(new { message = "Password changed successfully." });
     }
+
+    [Authorize]
+    [HttpDelete("account")]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        await authService.DeleteAccountAsync(User.GetUserId());
+        return NoContent();
+    }
 }

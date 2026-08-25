@@ -18,9 +18,9 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
         };
     }
 
-    public async Task<CustomerDto?> GetByIdAsync(int id)
+    public async Task<CustomerDto?> GetByIdAsync(int userId, int id)
     {
-        var customer = await repository.GetByIdAsync(id);
+        var customer = await repository.GetByIdAsync(userId, id);
         return customer == null ? null : ToDto(customer);
     }
 
@@ -41,13 +41,8 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
 
     public async Task<CustomerDto> UpdateAsync(int userId, int id, CreateCustomerDto dto)
     {
-        var customer = await repository.GetByIdAsync(id)
+        var customer = await repository.GetByIdAsync(userId, id)
             ?? throw new KeyNotFoundException($"No customer found with ID: {id}");
-
-        if (customer.UserId != userId)
-        {
-            throw new UnauthorizedAccessException("You do not have access to this customer.");
-        }
 
         customer.Name = dto.Name;
         customer.Phone = dto.Phone;
@@ -60,13 +55,8 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
 
     public async Task DeleteAsync(int userId, int id)
     {
-        var customer = await repository.GetByIdAsync(id)
+        var customer = await repository.GetByIdAsync(userId, id)
             ?? throw new KeyNotFoundException($"No customer found with ID: {id}");
-
-        if (customer.UserId != userId)
-        {
-            throw new UnauthorizedAccessException("You do not have access to this customer.");
-        }
 
         await repository.RemoveAsync(customer);
     }

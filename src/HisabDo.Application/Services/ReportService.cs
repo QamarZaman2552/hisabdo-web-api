@@ -22,4 +22,20 @@ public class ReportService(IReportRepository repository) : IReportService
     {
         return repository.GetCategoryBreakdownAsync(userId);
     }
+
+    public async Task<NotificationSummaryDto> GetNotificationsAsync(int userId)
+    {
+        var now = DateTime.UtcNow;
+        var todayStart = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc);
+        var weekStart = now.AddDays(-7);
+
+        var today = await repository.GetPeriodSummaryAsync(userId, todayStart, now);
+        var week = await repository.GetPeriodSummaryAsync(userId, weekStart, now);
+
+        return new NotificationSummaryDto
+        {
+            Today = today,
+            ThisWeek = week
+        };
+    }
 }

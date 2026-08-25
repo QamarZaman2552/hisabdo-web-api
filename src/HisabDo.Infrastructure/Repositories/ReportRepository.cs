@@ -62,4 +62,25 @@ public class ReportRepository(HisabDoDbContext context) : IReportRepository
             .OrderByDescending(c => c.TransactionCount)
             .ToListAsync();
     }
+
+    public async Task<PeriodSummaryDto> GetPeriodSummaryAsync(int userId, DateTime from, DateTime to)
+    {
+        var summary = await context.Transactions
+            .Where(t => t.UserId == userId && !t.IsDeleted && t.TransactionDate >= from && t.TransactionDate <= to)
+            .GroupBy(t => 1)
+            .Select(g => new
+            {
+                Count = g.Count(),
+                Receivable = g.Where(t => t.Type == TransactionType.Receivable).Sum(t => t.Amount),
+                Payable = g.Where(t => t.Type == TransactionType.Payable).Sum(t => t.Amount)
+            })
+            .FirstOrDefaultAsync();
+
+        return new PeriodSummaryDto
+        {
+            Transactions = summary?.Count ?? 0,
+            Receivable = summary?.Receivable ?? 0,
+            Payable = summary?.Payable ?? 0
+        };
+    }
 }

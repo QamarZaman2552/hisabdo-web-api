@@ -20,18 +20,13 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
 
     public async Task<IEnumerable<TransactionDto>> GetByCategoryAsync(int userId, int categoryId)
     {
-        if (!await repository.CategoryExistsAsync(userId, categoryId))
-        {
-            throw new KeyNotFoundException($"No category found with ID: {categoryId}");
-        }
-
         var transactions = await repository.GetByCategoryAsync(userId, categoryId);
         return transactions.Select(ToDto);
     }
 
-    public async Task<TransactionDto?> GetByIdAsync(int id)
+    public async Task<TransactionDto?> GetByIdAsync(int userId, int id)
     {
-        var transaction = await repository.GetByIdAsync(id);
+        var transaction = await repository.GetByIdAsync(userId, id);
         return transaction == null ? null : ToDto(transaction);
     }
 
@@ -52,18 +47,13 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
         };
 
         await repository.AddAsync(transaction);
-        return await GetByIdAsync(transaction.Id) ?? ToDto(transaction);
+        return await GetByIdAsync(userId, transaction.Id) ?? ToDto(transaction);
     }
 
     public async Task<TransactionDto> UpdateAsync(int userId, int id, CreateTransactionDto dto)
     {
-        var transaction = await repository.GetByIdAsync(id)
+        var transaction = await repository.GetByIdAsync(userId, id)
             ?? throw new KeyNotFoundException($"No transaction found with ID: {id}");
-
-        if (transaction.UserId != userId)
-        {
-            throw new UnauthorizedAccessException("You do not have access to this transaction.");
-        }
 
         await EnsureCustomerAndCategoryExistAsync(userId, dto.CustomerId, dto.CategoryId);
         EnsureDateIsNotInFuture(dto.TransactionDate);
@@ -76,18 +66,13 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
         transaction.TransactionDate = dto.TransactionDate ?? transaction.TransactionDate;
 
         await repository.UpdateAsync(transaction);
-        return await GetByIdAsync(id) ?? ToDto(transaction);
+        return await GetByIdAsync(userId, id) ?? ToDto(transaction);
     }
 
     public async Task DeleteAsync(int userId, int id)
     {
-        var transaction = await repository.GetByIdAsync(id)
+        var transaction = await repository.GetByIdAsync(userId, id)
             ?? throw new KeyNotFoundException($"No transaction found with ID: {id}");
-
-        if (transaction.UserId != userId)
-        {
-            throw new UnauthorizedAccessException("You do not have access to this transaction.");
-        }
 
         if (!string.IsNullOrEmpty(transaction.AttachmentUrl))
         {
@@ -103,13 +88,8 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
 
     public async Task UpdateAttachmentUrlAsync(int userId, int transactionId, string attachmentUrl)
     {
-        var transaction = await repository.GetByIdAsync(transactionId)
+        var transaction = await repository.GetByIdAsync(userId, transactionId)
             ?? throw new KeyNotFoundException($"No transaction found with ID: {transactionId}");
-
-        if (transaction.UserId != userId)
-        {
-            throw new UnauthorizedAccessException("You do not have access to this transaction.");
-        }
 
         transaction.AttachmentUrl = attachmentUrl;
         await repository.UpdateAsync(transaction);
@@ -117,13 +97,8 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
 
     public async Task<string?> GetAttachmentUrlAsync(int userId, int transactionId)
     {
-        var transaction = await repository.GetByIdAsync(transactionId)
+        var transaction = await repository.GetByIdAsync(userId, transactionId)
             ?? throw new KeyNotFoundException($"No transaction found with ID: {transactionId}");
-
-        if (transaction.UserId != userId)
-        {
-            throw new UnauthorizedAccessException("You do not have access to this transaction.");
-        }
 
         return transaction.AttachmentUrl;
     }

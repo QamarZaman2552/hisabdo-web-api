@@ -22,4 +22,10 @@ public class ReportsController(IReportService reportService) : ControllerBase
     {
         return Ok(await reportService.GetCategoryBreakdownAsync(User.GetUserId()));
     }
+
+    [HttpGet("notifications")]
+    public async Task<ActionResult<NotificationSummaryDto>> GetNotifications()
+    {
+        return Ok(await reportService.GetNotificationsAsync(User.GetUserId()));
+    }
 }

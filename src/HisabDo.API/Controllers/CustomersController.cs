@@ -22,7 +22,7 @@ public class CustomersController(ICustomerService customerService) : ControllerB
     [HttpGet("{id:int}")]
     public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
     {
-        var customer = await customerService.GetByIdAsync(id);
+        var customer = await customerService.GetByIdAsync(User.GetUserId(), id);
 
         if (customer == null)
         {

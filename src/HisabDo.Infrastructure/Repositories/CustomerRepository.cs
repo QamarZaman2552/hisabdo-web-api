@@ -26,10 +26,10 @@ public class CustomerRepository(HisabDoDbContext context) : ICustomerRepository
         return (items, totalCount);
     }
 
-    public async Task<Customer?> GetByIdAsync(int id)
+    public async Task<Customer?> GetByIdAsync(int userId, int id)
     {
         return await context.Customers
-            .FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
+            .FirstOrDefaultAsync(c => c.UserId == userId && c.Id == id && !c.IsDeleted);
     }
 
     public async Task<Customer> AddAsync(Customer customer)

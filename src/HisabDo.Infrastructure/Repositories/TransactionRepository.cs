@@ -71,12 +71,12 @@ public class TransactionRepository(HisabDoDbContext context) : ITransactionRepos
             .ToListAsync();
     }
 
-    public async Task<Transaction?> GetByIdAsync(int id)
+    public async Task<Transaction?> GetByIdAsync(int userId, int id)
     {
         return await context.Transactions
             .Include(t => t.Customer)
             .Include(t => t.Category)
-            .FirstOrDefaultAsync(t => t.Id == id && !t.IsDeleted);
+            .FirstOrDefaultAsync(t => t.UserId == userId && t.Id == id && !t.IsDeleted);
     }
 
     public async Task<bool> CustomerExistsAsync(int userId, int customerId)

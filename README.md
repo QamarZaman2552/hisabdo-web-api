@@ -477,4 +477,46 @@ Returns `429 Too Many Requests` when exceeded.
 
 New users automatically get 7 default categories: Sales, Purchase, Rent, Food, Transport, Salary, Others.
 
+# Day 25 — Final Stabilization & SQA Handover
+
+## Bug Fixes
+
+- **BOLA on read endpoints (Categories/Customers/Transactions)** — `GetByIdAsync` now filters by `userId + id`; cross-user access returns 404
+- **Soft-deleted user login blocked** — `GetByEmailAsync` + `LoginAsync` both check `!IsDeleted`
+- **DELETE /auth/account** — Self-service account deletion (soft-delete + cascade)
+
+## New Features
+
+- **Notifications summary** — `GET /reports/notifications` returns Today + This Week `{receivable, payable, transactions}`
+
+## Security
+
+- All GET-by-ID endpoints now verify ownership (BOLA fixed)
+- Rate limiting: 100 req/min global, 10 req/min auth endpoints
+- CORS enabled for frontend integration
+- JWT secret validation at startup
+
+## Testing
+
+- [SQA Handover Document](docs/SQA-Handover.md) — complete endpoint reference, test scenarios, credentials
+- Postman collection updated with auto-save ID variables (`catId`, `custId`, `txId`)
+
+## Endpoint Summary (36 total)
+
+| Module | Endpoints |
+|--------|-----------|
+| Auth | 6 (register, login, me GET/PUT, change-password, **delete-account**) |
+| Categories | 7 (CRUD + pagination + category transactions) |
+| Customers | 6 (CRUD + pagination) |
+| Transactions | 10 (CRUD + pagination + search + filters + **file upload**) |
+| Reports | 6 (summary + by-category + **notifications**) |
+| Settings | 3 (GET/PUT/DELETE) |
+| Admin | 1 (users list) |
+
+## Files for SQA
+
+- **Postman**: `docs/HisabDo-API.postman_collection.json` (36 requests, auto-token, ID variables)
+- **Handover**: `docs/SQA-Handover.md` (full endpoint reference, test scenarios, credentials)
+- **Swagger**: `http://localhost:5181/swagger`
+
 
