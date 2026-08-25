@@ -77,14 +77,14 @@ Open `http://localhost:5181/swagger` to test (the API opens Swagger automaticall
 
 ```text
 hisabdo-web-api/
-â”œâ”€â”€ src/
-â”‚   â”œâ”€â”€ HisabDo.API/            # Controllers, middleware, Program.cs, config
-â”‚   â”œâ”€â”€ HisabDo.Application/    # Services, DTOs, repository interfaces
-â”‚   â”œâ”€â”€ HisabDo.Domain/         # Entities, enums, base class
-â”‚   â””â”€â”€ HisabDo.Infrastructure/ # EF Core, DbContext, repositories (implementations)
-â”œâ”€â”€ tests/                      # (future)
-â”œâ”€â”€ docs/ERD.md                 # Database diagram
-â””â”€â”€ README.md
+|-- src/
+|   |-- HisabDo.API/            # Controllers, middleware, Program.cs, config
+|   |-- HisabDo.Application/    # Services, DTOs, repository interfaces
+|   |-- HisabDo.Domain/         # Entities, enums, base class
+|   `-- HisabDo.Infrastructure/ # EF Core, DbContext, repositories (implementations)
+|-- tests/                      # (future)
+|-- docs/ERD.md                 # Database diagram
+`-- README.md
 ```
 
 Project references (one direction only):
