@@ -38,7 +38,7 @@ http://localhost:5181/swagger
 
 ---
 
-## 3. Complete Endpoint Reference (36 Endpoints)
+## 3. Complete Endpoint Reference (39 Endpoints)
 
 ### Auth (6)
 | Method | Endpoint | Auth | Description |
@@ -99,6 +99,13 @@ http://localhost:5181/swagger
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
 | GET | `/admin/users` | ✅ (Admin) | List all users (soft-deleted excluded) |
+
+### Data — Backup/Restore/Danger Zone (3)
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| GET | `/data/backup` | ✅ | Export all data as JSON (settings, categories, customers, transactions) |
+| POST | `/data/restore?replace=false\|true` | ✅ | Import backup JSON; IDs auto-remapped; `replace=true` wipes first (atomic) |
+| DELETE | `/data/all` | ✅ | Danger Zone: clear all transactions/customers/categories (account stays) |
 
 ---
 
@@ -198,6 +205,17 @@ http://localhost:5181/swagger
 - [ ] DELETE /auth/account → 204
 - [ ] Login after account delete → 401
 - [ ] Soft-deleted user cannot login
+
+### Data — Backup/Restore/Clear (NEW)
+- [ ] GET /data/backup returns JSON with settings/categories/customers/transactions counts matching user data
+- [ ] Backup only includes own data (user B cannot see user A's data in export)
+- [ ] POST /data/restore?replace=false merges: existing same-name categories are skipped (counted in categoriesSkipped)
+- [ ] POST /data/restore?replace=true wipes data first then imports everything (counts match backup)
+- [ ] Restored transactions keep amount/type/note/date and remapped customer/category names
+- [ ] Restore is atomic: if import fails mid-way, no partial data remains
+- [ ] DELETE /data/all → 204, then backup shows 0 categories/customers/transactions
+- [ ] DELETE /data/all deletes attachment files from disk (uploads folder)
+- [ ] After clear-all, account still works: can create new customers/categories/transactions
 
 ---
 

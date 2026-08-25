@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using HisabDo.Application.DTOs;
 using HisabDo.Application.Repositories;
 using HisabDo.Domain.Entities;
@@ -26,6 +27,8 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
 
     public async Task<CustomerDto> CreateAsync(int userId, CreateCustomerDto dto)
     {
+        EnsureEmailIsValid(dto.Email);
+
         var customer = new Customer
         {
             UserId = userId,
@@ -41,6 +44,8 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
 
     public async Task<CustomerDto> UpdateAsync(int userId, int id, CreateCustomerDto dto)
     {
+        EnsureEmailIsValid(dto.Email);
+
         var customer = await repository.GetByIdAsync(userId, id)
             ?? throw new KeyNotFoundException($"No customer found with ID: {id}");
 
@@ -59,6 +64,19 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
             ?? throw new KeyNotFoundException($"No customer found with ID: {id}");
 
         await repository.RemoveAsync(customer);
+    }
+
+    private static void EnsureEmailIsValid(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return;
+        }
+
+        if (!new EmailAddressAttribute().IsValid(email))
+        {
+            throw new InvalidOperationException("Email is not in a valid format.");
+        }
     }
 
     private static CustomerDto ToDto(Customer customer)

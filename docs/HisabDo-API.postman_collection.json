@@ -543,6 +543,51 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "Data",
+            "item": [
+                {
+                    "name": "Data - Backup (Export)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            { "key": "Authorization", "value": "Bearer {{token}}" }
+                        ],
+                        "url": { "host": ["{{baseUrl}}"], "path": ["data", "backup"] },
+                        "description": "Exports all your data as JSON: settings, categories, customers, transactions. Save the response body to use with Restore."
+                    }
+                },
+                {
+                    "name": "Data - Restore (Import)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            { "key": "Content-Type", "value": "application/json" },
+                            { "key": "Authorization", "value": "Bearer {{token}}" }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"exportedAt\": \"2026-08-25T12:00:00Z\",\n  \"appVersion\": \"1.0\",\n  \"settings\": { \"currencyCode\": \"PKR\", \"languageCode\": \"en\" },\n  \"categories\": [ { \"name\": \"My Cat\", \"isDefault\": false, \"originalId\": 100 } ],\n  \"customers\": [ { \"name\": \"Ali\", \"phone\": \"03001234567\", \"email\": \"\", \"notes\": \"\", \"originalId\": 200 } ],\n  \"transactions\": [ { \"amount\": 500, \"type\": 1, \"note\": \"imported\", \"transactionDate\": \"2026-08-25T10:00:00Z\", \"originalCategoryId\": 100, \"originalCustomerId\": 200 } ]\n}"
+                        },
+                        "url": { "host": ["{{baseUrl}}"], "path": ["data", "restore"], "query": [
+                            { "key": "replace", "value": "false", "description": "true = wipe my data first, then import" }
+                        ]},
+                        "description": "Imports a backup JSON. Category/customer IDs are remapped automatically. replace=true wipes existing data first (atomic)."
+                    }
+                },
+                {
+                    "name": "Data - Clear All My Data",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            { "key": "Authorization", "value": "Bearer {{token}}" }
+                        ],
+                        "url": { "host": ["{{baseUrl}}"], "path": ["data", "all"] },
+                        "description": "Danger Zone: soft-deletes ALL your transactions, customers and categories (attachments deleted from disk). Account stays active."
+                    }
+                }
+            ]
         }
     ],
     "auth": {

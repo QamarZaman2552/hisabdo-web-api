@@ -44,7 +44,7 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
             entity.HasKey(c => c.Id);
             entity.Property(c => c.Name).IsRequired().HasMaxLength(50);
             entity.HasIndex(c => c.UserId);
-            entity.HasIndex(c => new { c.UserId, c.Name }).IsUnique();
+            entity.HasIndex(c => new { c.UserId, c.Name }).IsUnique().HasFilter("[IsDeleted] = 0");
         });
 
         modelBuilder.Entity<Transaction>(entity =>

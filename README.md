@@ -484,6 +484,10 @@ New users automatically get 7 default categories: Sales, Purchase, Rent, Food, T
 - **BOLA on read endpoints (Categories/Customers/Transactions)** — `GetByIdAsync` now filters by `userId + id`; cross-user access returns 404
 - **Soft-deleted user login blocked** — `GetByEmailAsync` + `LoginAsync` both check `!IsDeleted`
 - **DELETE /auth/account** — Self-service account deletion (soft-delete + cascade)
+- **Customer email is optional now** — empty email accepted; invalid format still rejected with 400
+- **Deleted category name can be recreated** — unique index now filtered (`WHERE [IsDeleted] = 0`)
+- **DbUpdateException → 409 Conflict** — constraint violations no longer return 500
+- **Restore is atomic** — backup import wrapped in DB transaction; failure leaves no partial data
 
 ## New Features
 
@@ -501,7 +505,7 @@ New users automatically get 7 default categories: Sales, Purchase, Rent, Food, T
 - [SQA Handover Document](docs/SQA-Handover.md) — complete endpoint reference, test scenarios, credentials
 - Postman collection updated with auto-save ID variables (`catId`, `custId`, `txId`)
 
-## Endpoint Summary (36 total)
+## Endpoint Summary (39 total)
 
 | Module | Endpoints |
 |--------|-----------|
@@ -512,6 +516,15 @@ New users automatically get 7 default categories: Sales, Purchase, Rent, Food, T
 | Reports | 6 (summary + by-category + **notifications**) |
 | Settings | 3 (GET/PUT/DELETE) |
 | Admin | 1 (users list) |
+| Data | 3 (**backup / restore / clear-all**) |
+
+### Data — Backup/Restore/Danger Zone
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/v1/data/backup | Export all your data as JSON (settings, categories, customers, transactions) |
+| POST | /api/v1/data/restore?replace=true\|false | Import backup JSON with automatic ID remapping; replace=true wipes first (atomic) |
+| DELETE | /api/v1/data/all | Danger Zone: clear all transactions/customers/categories, account stays active |
 
 ## Files for SQA
 

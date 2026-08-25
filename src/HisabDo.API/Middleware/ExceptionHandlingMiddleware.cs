@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace HisabDo.API.Middleware;
 
@@ -28,6 +29,11 @@ public class ExceptionHandlingMiddleware(
         {
             logger.LogWarning(ex, "Unauthorized access attempt.");
             await WriteProblemAsync(context, StatusCodes.Status401Unauthorized, "Unauthorized", ex.Message, "https://tools.ietf.org/html/rfc7231#section-6.5.2");
+        }
+        catch (DbUpdateException ex)
+        {
+            logger.LogWarning(ex, "Database constraint violation.");
+            await WriteProblemAsync(context, StatusCodes.Status409Conflict, "Conflict", "The request conflicts with existing data.", "https://tools.ietf.org/html/rfc9110#section-15.5.10");
         }
         catch (Exception ex)
         {
