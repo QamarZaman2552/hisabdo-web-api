@@ -8,6 +8,7 @@ public class AuthService(
     IUserRepository repository,
     ICategoryRepository categoryRepository,
     ISettingRepository settingRepository,
+    IBackupRepository backupRepository,
     IPasswordHasher passwordHasher,
     ITokenService tokenService) : IAuthService
 {
@@ -53,6 +54,7 @@ public class AuthService(
         }
         catch
         {
+            await backupRepository.ClearAllAsync(user.Id);
             await repository.DeleteAsync(user.Id);
             throw new InvalidOperationException("Failed to create account defaults. Please try again.");
         }

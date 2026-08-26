@@ -63,6 +63,11 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
         var customer = await repository.GetByIdAsync(userId, id)
             ?? throw new KeyNotFoundException($"No customer found with ID: {id}");
 
+        if (await repository.HasTransactionsAsync(id))
+        {
+            throw new InvalidOperationException("Customer has transactions and cannot be deleted.");
+        }
+
         await repository.RemoveAsync(customer);
     }
 

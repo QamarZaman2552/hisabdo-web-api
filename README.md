@@ -457,10 +457,10 @@ All list endpoints now return:
 
 | Policy | Limit | Window | Queue |
 |--------|-------|--------|-------|
-| `fixed` (default) | 100 requests | 1 minute | 10 |
+| Global (per IP) | 100 requests | 1 minute | 0 |
 | `auth` (login/register) | 10 requests | 1 minute | 0 |
 
-Returns `429 Too Many Requests` when exceeded.
+Both return `429 Too Many Requests` as RFC 7807 ProblemDetails when exceeded.
 
 ## File Attachment Upload
 
@@ -528,9 +528,50 @@ New users automatically get 7 default categories: Sales, Purchase, Rent, Food, T
 
 ## Files for SQA
 
-- **Postman**: `docs/HisabDo-API.postman_collection.json` (36 requests, auto-token, ID variables)
+- **Postman**: `docs/HisabDo-API.postman_collection.json` (39 requests, auto-token, ID variables)
 - **Handover**: `docs/SQA-Handover.md` (full endpoint reference, test scenarios, credentials)
 - **Swagger**: `http://localhost:5181/swagger`
+
+# Day 26 - Stable Backend for Frontend Integration & QA
+
+## Integration Fixes
+
+- **Unified error format** — every error response is now RFC 7807 ProblemDetails (`type`, `title`, `status`, `detail`, `traceId`), including 404s from controllers and upload validation. Type URLs standardized on RFC 9110.
+- **Customer delete guard** — customer with transactions cannot be deleted (400), matching category rule. Data integrity preserved.
+
+## JWT Verification Results
+
+| Case | Result |
+|------|--------|
+| No token | 401 |
+| Garbage token | 401 |
+| Tampered signature | 401 |
+| Token without Bearer prefix | 401 |
+| Non-admin -> /admin/users | 403 |
+| Admin -> /admin/users | 200 |
+| Expiry | 24h, `ClockSkew=Zero` (exact expiry) |
+
+## Database Relationship Validation
+
+- Customer with transactions -> delete blocked (400)
+- Category with transactions -> delete blocked (400)
+- Transaction referencing deleted customer/category -> rejected (400)
+- Settings unique per active user; category name unique per active user (soft-deletes excluded)
+
+## Regression
+
+Full Postman/Swagger regression re-run after changes: all endpoints passing (CRUD, search, filters, pagination, reports, notifications, backup/restore/clear-all, admin).
+
+## Scenario-Wise Audit (90+ cases)
+
+Every module tested against happy paths, negatives, edge cases and business logic. Bugs found and fixed during the audit:
+
+1. **Global rate limiter was never attached** — `GlobalLimiter` (per-IP, 100/min, queue 0) added; verified live: 100x200 then 15x429 with ProblemDetails body
+2. **Deleted account remained usable via live token for 24h** — user fetch now filters `IsDeleted`; old token immediately gets 404
+3. **Registration rollback left orphan categories** — full cleanup (categories + settings) on partial failure
+4. **Restore could activate a soft-deleted settings row while another was active -> unique violation 409** — active-row-first ordering
+5. **Notifications "Today" excluded same-day transactions with later timestamps** — window extended to end-of-day; clients should send ISO-8601 UTC
+6. **Invalid `?period=` silently defaulted to month** — now returns 400 with allowed values listed
 
 ### Swagger - Day 20-25
 

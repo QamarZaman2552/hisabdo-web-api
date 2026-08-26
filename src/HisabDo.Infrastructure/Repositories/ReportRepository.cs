@@ -66,7 +66,7 @@ public class ReportRepository(HisabDoDbContext context) : IReportRepository
     public async Task<PeriodSummaryDto> GetPeriodSummaryAsync(int userId, DateTime from, DateTime to)
     {
         var summary = await context.Transactions
-            .Where(t => t.UserId == userId && !t.IsDeleted && t.TransactionDate >= from && t.TransactionDate <= to)
+            .Where(t => t.UserId == userId && !t.IsDeleted && t.TransactionDate >= from && t.TransactionDate < to)
             .GroupBy(t => 1)
             .Select(g => new
             {

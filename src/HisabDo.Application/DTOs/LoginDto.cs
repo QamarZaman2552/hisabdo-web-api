@@ -6,6 +6,7 @@ public class LoginDto
 {
     [Required(ErrorMessage = "Email is required.")]
     [EmailAddress(ErrorMessage = "Email is not in a valid format.")]
+    [StringLength(100, ErrorMessage = "Email must not exceed 100 characters.")]
     public string Email { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Password is required.")]

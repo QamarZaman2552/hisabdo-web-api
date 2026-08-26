@@ -19,7 +19,8 @@ public class SettingsController(ISettingService settingService) : ControllerBase
 
         if (settings == null)
         {
-            return NotFound(new { message = $"No settings found for user ID: {userId}" });
+            return Problem(statusCode: StatusCodes.Status404NotFound, title: "Resource not found",
+                detail: "No settings found. Update settings to create them.", type: "https://tools.ietf.org/html/rfc9110#section-15.5.5");
         }
 
         return Ok(settings);

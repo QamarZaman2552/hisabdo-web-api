@@ -16,7 +16,7 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
     public async Task<User?> GetByIdAsync(int userId)
     {
         return await context.Users
-            .FirstOrDefaultAsync(u => u.Id == userId);
+            .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
     }
 
     public async Task<bool> EmailExistsAsync(string email)

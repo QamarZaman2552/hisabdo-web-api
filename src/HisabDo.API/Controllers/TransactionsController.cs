@@ -30,7 +30,8 @@ public class TransactionsController(ITransactionService transactionService) : Co
 
         if (transaction == null)
         {
-            return NotFound(new { message = $"No transaction found with ID: {id}" });
+            return Problem(statusCode: StatusCodes.Status404NotFound, title: "Resource not found",
+                detail: $"No transaction found with ID: {id}", type: "https://tools.ietf.org/html/rfc9110#section-15.5.5");
         }
 
         return Ok(transaction);
@@ -66,14 +67,16 @@ public class TransactionsController(ITransactionService transactionService) : Co
     {
         if (file == null || file.Length == 0)
         {
-            return BadRequest(new { message = "No file uploaded." });
+            return Problem(statusCode: StatusCodes.Status400BadRequest, title: "Bad request",
+                detail: "No file uploaded.", type: "https://tools.ietf.org/html/rfc9110#section-15.5.1");
         }
 
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".pdf", ".gif" };
         var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
         if (!allowedExtensions.Contains(ext))
         {
-            return BadRequest(new { message = "Only jpg, jpeg, png, gif, and pdf files are allowed." });
+            return Problem(statusCode: StatusCodes.Status400BadRequest, title: "Bad request",
+                detail: "Only jpg, jpeg, png, gif, and pdf files are allowed.", type: "https://tools.ietf.org/html/rfc9110#section-15.5.1");
         }
 
         var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");

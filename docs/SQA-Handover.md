@@ -201,6 +201,38 @@ http://localhost:5181/swagger
 - [ ] Re-upload replaces old file
 - [ ] Delete transaction deletes attachment file
 
+### Error Format (Unified RFC 7807)
+- [ ] Every error response has shape: `type`, `title`, `status`, `detail`, `traceId` (no plain `{message}` anywhere)
+- [ ] GET non-existent id (customer/category/transaction) -> 404 ProblemDetails
+- [ ] Upload without file / wrong extension -> 400 ProblemDetails
+- [ ] Duplicate email register -> 400; DB-level duplicate race -> 409
+
+### JWT Negative Cases
+- [ ] No Authorization header -> 401
+- [ ] Garbage token string -> 401
+- [ ] Tampered signature -> 401
+- [ ] Token without "Bearer " prefix -> 401
+- [ ] Non-admin user on /admin/users -> 403
+- [ ] Expired token (24h, ClockSkew=Zero) -> 401
+
+### Referential Integrity
+- [ ] DELETE customer that HAS transactions -> 400 "Customer has transactions and cannot be deleted."
+- [ ] DELETE category that HAS transactions -> 400
+- [ ] Create transaction with soft-deleted customer/category -> 400
+- [ ] After clear-all (/data/all), same-name categories can be created again (filtered unique index)
+
+### Rate Limiting (verified live)
+- [ ] >100 requests/min from one IP on any endpoint -> 429 ProblemDetails (type rfc9110#15.5.9)
+- [ ] >10 requests/min on /auth/login or /auth/register -> 429
+- [ ] Limits reset after the 1-minute window
+
+### Account Deletion + Token
+- [ ] Old token used AFTER DELETE /auth/account -> 404 on /auth/me (immediately invalidated)
+
+### Reports Logic
+- [ ] GET /reports/summary?period=nonsense -> 400 with allowed values (week, month, 3months, year)
+- [ ] Notifications "Today" includes ALL of today's transactions (evening timestamps included)
+
 ### Account Management
 - [ ] DELETE /auth/account → 204
 - [ ] Login after account delete → 401

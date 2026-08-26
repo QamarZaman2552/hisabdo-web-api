@@ -66,13 +66,14 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
     public async Task<RestoreResultDto> RestoreAsync(int userId, BackupFileDto data, bool replaceExisting)
     {
         var result = new RestoreResultDto();
+        List<string> pendingAttachmentUrls = [];
 
         await using var dbTransaction = await context.Database.BeginTransactionAsync();
         try
         {
             if (replaceExisting)
             {
-                await ClearAllAsync(userId);
+                pendingAttachmentUrls = await ClearAllDatabaseAsync(userId);
             }
         var categoryMap = new Dictionary<int, int>();
         foreach (var dto in data.Categories ?? [])
@@ -99,7 +100,10 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
             };
             context.Categories.Add(category);
             await context.SaveChangesAsync();
-            categoryMap[dto.OriginalId] = category.Id;
+            if (dto.OriginalId > 0)
+            {
+                categoryMap[dto.OriginalId] = category.Id;
+            }
             result.CategoriesImported++;
         }
 
@@ -159,7 +163,10 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
         if (data.Settings != null)
         {
             var setting = await context.Settings
-                .FirstOrDefaultAsync(s => s.UserId == userId);
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => !s.IsDeleted)
+                .ThenBy(s => s.Id)
+                .FirstOrDefaultAsync();
 
             if (setting == null)
             {
@@ -180,6 +187,7 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
         }
 
         await dbTransaction.CommitAsync();
+        DeleteAttachmentFiles(pendingAttachmentUrls);
         return result;
         }
         catch
@@ -191,19 +199,16 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
 
     public async Task ClearAllAsync(int userId)
     {
+        var attachmentUrls = await ClearAllDatabaseAsync(userId);
+        DeleteAttachmentFiles(attachmentUrls);
+    }
+
+    private async Task<List<string>> ClearAllDatabaseAsync(int userId)
+    {
         var attachmentUrls = await context.Transactions
             .Where(t => t.UserId == userId && !t.IsDeleted && t.AttachmentUrl != null)
             .Select(t => t.AttachmentUrl!)
             .ToListAsync();
-
-        foreach (var url in attachmentUrls)
-        {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", url.TrimStart('/'));
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-        }
 
         await context.Transactions
             .Where(t => t.UserId == userId && !t.IsDeleted)
@@ -216,5 +221,19 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
         await context.Categories
             .Where(c => c.UserId == userId && !c.IsDeleted)
             .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsDeleted, true));
+
+        return attachmentUrls;
+    }
+
+    private static void DeleteAttachmentFiles(IEnumerable<string> urls)
+    {
+        foreach (var url in urls)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", url.TrimStart('/'));
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
     }
 }

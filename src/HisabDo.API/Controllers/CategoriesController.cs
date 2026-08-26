@@ -26,7 +26,8 @@ public class CategoriesController(ICategoryService categoryService) : Controller
 
         if (category == null)
         {
-            return NotFound(new { message = $"No category found with ID: {id}" });
+            return Problem(statusCode: StatusCodes.Status404NotFound, title: "Resource not found",
+                detail: $"No category found with ID: {id}", type: "https://tools.ietf.org/html/rfc9110#section-15.5.5");
         }
 
         return Ok(category);

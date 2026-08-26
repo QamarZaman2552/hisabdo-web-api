@@ -18,17 +18,17 @@ public class ExceptionHandlingMiddleware(
         catch (KeyNotFoundException ex)
         {
             logger.LogWarning(ex, "Requested resource was not found.");
-            await WriteProblemAsync(context, StatusCodes.Status404NotFound, "Resource not found", ex.Message, "https://tools.ietf.org/html/rfc7231#section-6.5.4");
+            await WriteProblemAsync(context, StatusCodes.Status404NotFound, "Resource not found", ex.Message, "https://tools.ietf.org/html/rfc9110#section-15.5.5");
         }
         catch (InvalidOperationException ex)
         {
             logger.LogWarning(ex, "Invalid operation in request.");
-            await WriteProblemAsync(context, StatusCodes.Status400BadRequest, "Bad request", ex.Message, "https://tools.ietf.org/html/rfc7231#section-6.5.1");
+            await WriteProblemAsync(context, StatusCodes.Status400BadRequest, "Bad request", ex.Message, "https://tools.ietf.org/html/rfc9110#section-15.5.1");
         }
         catch (UnauthorizedAccessException ex)
         {
             logger.LogWarning(ex, "Unauthorized access attempt.");
-            await WriteProblemAsync(context, StatusCodes.Status401Unauthorized, "Unauthorized", ex.Message, "https://tools.ietf.org/html/rfc7231#section-6.5.2");
+            await WriteProblemAsync(context, StatusCodes.Status401Unauthorized, "Unauthorized", ex.Message, "https://tools.ietf.org/html/rfc9110#section-15.5.2");
         }
         catch (DbUpdateException ex)
         {
