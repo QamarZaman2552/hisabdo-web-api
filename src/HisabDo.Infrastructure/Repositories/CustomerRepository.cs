@@ -10,7 +10,7 @@ public class CustomerRepository(HisabDoDbContext context) : ICustomerRepository
     public async Task<(List<Customer> Items, int TotalCount)> GetAllAsync(int userId, int page = 1, int pageSize = 50)
     {
         var query = context.Customers
-            .Where(c => c.UserId == userId && !c.IsDeleted);
+            .Where(c => c.UserId == userId);
 
         var totalCount = await query.CountAsync();
 

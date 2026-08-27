@@ -607,4 +607,53 @@ Every module tested against happy paths, negatives, edge cases and business logi
 ![Swagger 30](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20162433.png)
 ![Swagger 31](screenshots/Day-20-25-Task/Swagger_Day_20-25/Screenshot%202026-08-25%20164325.png)
 
+# Day 27 — Security Hardening & Production Readiness
+
+## Global Query Filter
+
+Added `HasQueryFilter` for `IsDeleted` on all 5 entities (User, Customer, Category, Transaction, Setting). Every EF Core query now automatically excludes soft-deleted records — no repository can accidentally leak deleted data.
+
+Removed redundant `!IsDeleted` from all repository queries (cleaner code, same safety).
+
+## Delete Account Cascade
+
+`DELETE /auth/account` now:
+- Soft-deletes all user data (categories, customers, transactions, settings)
+- Deletes attachment files from disk
+- Immediately invalidates the JWT token (user fetch returns null)
+
+## Validation Improvements
+
+- `TransactionFilterDto.Page` — `[Range(1, int.MaxValue)]`
+- `TransactionFilterDto.PageSize` — `[Range(1, 100)]`
+- `TransactionFilterDto.Search` — `[StringLength(100)]`
+- Invalid `pageSize` now returns 400 at model validation (not silently clamped)
+
+## Safety Improvements
+
+- `DELETE /data/all` now requires `?confirm=true` parameter — accidental deletion prevented
+- `POST /data/restore` now has `[RequestSizeLimit(10MB)]` — prevents memory abuse
+- `POST /transactions/{id}/attachment` now has `[Consumes("multipart/form-data")]` — Swagger clarity
+- 4xx error messages now visible in production (previously hidden behind generic "An error occurred")
+
+## Code Organization
+
+- `ISettingRepository` moved to its own file (was inside `IUserRepository.cs`)
+
+## Smoke Test Results (11/11 PASS)
+
+| # | Scenario | Result |
+|---|----------|--------|
+| 1 | Register creates 7 default categories | PASS |
+| 2 | Default category protected from delete | PASS |
+| 3 | Non-default category delete → hidden (global filter) | PASS |
+| 4 | Pagination with clamped values | PASS |
+| 5 | Invalid page=-1 → 400 | PASS |
+| 6 | PageSize=101 → 400 (model validation) | PASS |
+| 7 | ClearAll without confirm → 400 | PASS |
+| 8 | ClearAll with confirm → 204 | PASS |
+| 9 | Delete account cascade + token invalid | PASS |
+| 10 | 4xx detail visible in production | PASS |
+| 11 | Restore endpoint responsive | PASS |
+
 

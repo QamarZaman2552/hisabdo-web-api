@@ -69,6 +69,12 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
             entity.Property(s => s.LanguageCode).HasMaxLength(10);
         });
 
+        modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
+        modelBuilder.Entity<Customer>().HasQueryFilter(c => !c.IsDeleted);
+        modelBuilder.Entity<Category>().HasQueryFilter(c => !c.IsDeleted);
+        modelBuilder.Entity<Transaction>().HasQueryFilter(t => !t.IsDeleted);
+        modelBuilder.Entity<Setting>().HasQueryFilter(s => !s.IsDeleted);
+
         modelBuilder.Entity<User>()
             .HasMany(u => u.Customers)
             .WithOne(c => c.User)

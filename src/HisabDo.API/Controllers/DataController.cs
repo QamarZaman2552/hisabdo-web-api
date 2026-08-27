@@ -18,6 +18,7 @@ public class DataController(IDataService dataService) : ControllerBase
     }
 
     [HttpPost("restore")]
+    [RequestSizeLimit(10 * 1024 * 1024)]
     public async Task<ActionResult<RestoreResultDto>> Restore(
         [FromBody] BackupFileDto data,
         [FromQuery] bool replace = false)
@@ -26,8 +27,13 @@ public class DataController(IDataService dataService) : ControllerBase
     }
 
     [HttpDelete("all")]
-    public async Task<IActionResult> ClearAll()
+    public async Task<IActionResult> ClearAll([FromQuery] bool confirm = false)
     {
+        if (!confirm)
+        {
+            return Problem(statusCode: StatusCodes.Status400BadRequest, title: "Bad request",
+                detail: "Add ?confirm=true to proceed with data deletion.", type: "https://tools.ietf.org/html/rfc9110#section-15.5.1");
+        }
         await dataService.ClearAllAsync(User.GetUserId());
         return NoContent();
     }

@@ -9,11 +9,13 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
     public async Task<PaginatedResult<TransactionDto>> GetAllAsync(int userId, TransactionFilterDto filter)
     {
         var (transactions, totalCount) = await repository.GetAllAsync(userId, filter);
+        var clampedPage = Math.Max(1, filter.Page);
+        var clampedPageSize = Math.Clamp(filter.PageSize, 1, 100);
         return new PaginatedResult<TransactionDto>
         {
             Items = transactions.Select(ToDto).ToList(),
-            Page = filter.Page,
-            PageSize = filter.PageSize,
+            Page = clampedPage,
+            PageSize = clampedPageSize,
             TotalCount = totalCount
         };
     }

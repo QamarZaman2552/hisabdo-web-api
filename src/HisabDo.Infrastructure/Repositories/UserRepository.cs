@@ -10,13 +10,13 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
     public async Task<User?> GetByEmailAsync(string email)
     {
         return await context.Users
-            .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() && !u.IsDeleted);
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
     }
 
     public async Task<User?> GetByIdAsync(int userId)
     {
         return await context.Users
-            .FirstOrDefaultAsync(u => u.Id == userId && !u.IsDeleted);
+            .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
     public async Task<bool> EmailExistsAsync(string email)
@@ -28,7 +28,6 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
     public async Task<List<User>> GetUsersAsync()
     {
         return await context.Users
-            .Where(u => !u.IsDeleted)
             .OrderBy(u => u.CreatedAt)
             .ToListAsync();
     }

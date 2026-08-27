@@ -9,6 +9,7 @@ public class AuthService(
     ICategoryRepository categoryRepository,
     ISettingRepository settingRepository,
     IBackupRepository backupRepository,
+    ITransactionRepository transactionRepository,
     IPasswordHasher passwordHasher,
     ITokenService tokenService) : IAuthService
 {
@@ -139,6 +140,20 @@ public class AuthService(
 
     public async Task DeleteAccountAsync(int userId)
     {
+        var transactions = await transactionRepository.GetAllAsync(userId, new TransactionFilterDto { Page = 1, PageSize = int.MaxValue });
+        foreach (var tx in transactions.Items)
+        {
+            if (!string.IsNullOrEmpty(tx.AttachmentUrl))
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", tx.AttachmentUrl.TrimStart('/'));
+                if (File.Exists(filePath))
+                {
+                    try { File.Delete(filePath); } catch { }
+                }
+            }
+        }
+
+        await backupRepository.ClearAllAsync(userId);
         await repository.DeleteAsync(userId);
     }
 

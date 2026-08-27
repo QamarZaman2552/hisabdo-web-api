@@ -12,10 +12,3 @@ public interface IUserRepository
     Task UpdateAsync(User user);
     Task DeleteAsync(int userId);
 }
-
-public interface ISettingRepository
-{
-    Task<Setting?> GetByUserIdAsync(int userId);
-    Task<Setting> AddOrUpdateAsync(Setting setting);
-    Task RemoveAsync(Setting setting);
-}

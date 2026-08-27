@@ -10,7 +10,7 @@ public class CategoryRepository(HisabDoDbContext context) : ICategoryRepository
     public async Task<(List<Category> Items, int TotalCount)> GetAllAsync(int userId, int page = 1, int pageSize = 50)
     {
         var query = context.Categories
-            .Where(c => c.UserId == userId && !c.IsDeleted);
+            .Where(c => c.UserId == userId);
 
         var totalCount = await query.CountAsync();
 

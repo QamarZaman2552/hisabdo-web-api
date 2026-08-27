@@ -52,7 +52,7 @@ public class ExceptionHandlingMiddleware(
         context.Response.StatusCode = statusCode;
         context.Response.ContentType = "application/problem+json; charset=utf-8";
 
-        var responseDetail = env.IsDevelopment() ? detail : "An error occurred. Please try again later.";
+        var responseDetail = env.IsDevelopment() || statusCode < 500 ? detail : "An error occurred. Please try again later.";
 
         var problem = new
         {

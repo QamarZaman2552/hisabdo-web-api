@@ -156,7 +156,7 @@ http://localhost:5181/swagger
 | **Rate Limiting** | 100 req/min global, 10 req/min auth endpoints |
 | **Soft Delete** | All entities use `IsDeleted` flag |
 | **Password Policy** | Min 8 chars, uppercase, lowercase, digit, special |
-| **CORS** | Enabled (`AllowAnyOrigin`, `AllowAnyHeader`, `AllowAnyMethod`) |
+| **CORS** | Production: locked to `AllowedOrigins` whitelist (no credentials leak). Development: `AllowAnyOrigin` for local testing |
 
 ---
 
@@ -254,7 +254,7 @@ http://localhost:5181/swagger
 ## 7. Known Limitations / Future Work
 
 1. **Backup/Restore API** not implemented (mobile-only feature)
-2. **CORS** currently allows all origins — tighten for production
+2. **CORS** configured via `AllowedOrigins` in `appsettings.json` — production uses whitelist, development allows any origin
 3. **Email verification** not implemented
 4. **Refresh tokens** not implemented (JWT only)
 5. **Webhooks** not implemented

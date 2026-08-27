@@ -62,6 +62,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     }
 
     [HttpPost("{id:int}/attachment")]
+    [Consumes("multipart/form-data")]
     [RequestSizeLimit(10 * 1024 * 1024)]
     public async Task<IActionResult> UploadAttachment(int id, IFormFile file)
     {

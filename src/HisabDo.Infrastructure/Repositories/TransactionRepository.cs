@@ -11,7 +11,7 @@ public class TransactionRepository(HisabDoDbContext context) : ITransactionRepos
     public async Task<(List<Transaction> Items, int TotalCount)> GetAllAsync(int userId, TransactionFilterDto filter)
     {
         var query = context.Transactions
-            .Where(t => t.UserId == userId && !t.IsDeleted);
+            .Where(t => t.UserId == userId);
 
         if (filter.Type.HasValue)
         {

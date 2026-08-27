@@ -10,7 +10,7 @@ public class SettingRepository(HisabDoDbContext context) : ISettingRepository
     public async Task<Setting?> GetByUserIdAsync(int userId)
     {
         return await context.Settings
-            .FirstOrDefaultAsync(s => s.UserId == userId && !s.IsDeleted);
+            .FirstOrDefaultAsync(s => s.UserId == userId);
     }
 
     public async Task<Setting> AddOrUpdateAsync(Setting setting)
