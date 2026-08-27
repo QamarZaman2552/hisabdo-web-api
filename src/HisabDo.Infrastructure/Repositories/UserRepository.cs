@@ -35,14 +35,28 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
     public async Task<User> AddAsync(User user)
     {
         context.Users.Add(user);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. Please try again.");
+        }
         return user;
     }
 
     public async Task UpdateAsync(User user)
     {
         context.Users.Update(user);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. The record was modified by another user. Please refresh and try again.");
+        }
     }
 
     public async Task DeleteAsync(int userId)
@@ -52,7 +66,14 @@ public class UserRepository(HisabDoDbContext context) : IUserRepository
         {
             user.IsDeleted = true;
             context.Users.Update(user);
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new InvalidOperationException("A concurrency error occurred. Please try again.");
+            }
         }
     }
 }

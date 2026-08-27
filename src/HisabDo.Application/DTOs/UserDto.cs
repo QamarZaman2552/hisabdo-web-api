@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace HisabDo.Application.DTOs;
 
 public class UserDto

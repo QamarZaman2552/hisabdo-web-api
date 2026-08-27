@@ -1,9 +1,18 @@
+using HisabDo.Application.DTOs;
+
 namespace HisabDo.Application.Services;
 
 public static class PasswordPolicy
 {
-    public const int MinLength = 8;
-    public const int MaxLength = 64;
+    private static PasswordPolicySettings _settings = new();
+
+    public static void Configure(PasswordPolicySettings settings)
+    {
+        _settings = settings;
+    }
+
+    public static int MinLength => _settings.MinLength;
+    public static int MaxLength => _settings.MaxLength;
 
     public static void Validate(string password)
     {
@@ -12,27 +21,27 @@ public static class PasswordPolicy
             throw new InvalidOperationException("Password is required.");
         }
 
-        if (password.Length < MinLength || password.Length > MaxLength)
+        if (password.Length < _settings.MinLength || password.Length > _settings.MaxLength)
         {
-            throw new InvalidOperationException($"Password must be between {MinLength} and {MaxLength} characters.");
+            throw new InvalidOperationException($"Password must be between {_settings.MinLength} and {_settings.MaxLength} characters.");
         }
 
-        if (!password.Any(char.IsUpper))
+        if (_settings.RequireUppercase && !password.Any(char.IsUpper))
         {
             throw new InvalidOperationException("Password must contain at least one uppercase letter.");
         }
 
-        if (!password.Any(char.IsLower))
+        if (_settings.RequireLowercase && !password.Any(char.IsLower))
         {
             throw new InvalidOperationException("Password must contain at least one lowercase letter.");
         }
 
-        if (!password.Any(char.IsDigit))
+        if (_settings.RequireDigit && !password.Any(char.IsDigit))
         {
             throw new InvalidOperationException("Password must contain at least one digit.");
         }
 
-        if (!password.Any(c => !char.IsLetterOrDigit(c)))
+        if (_settings.RequireSpecialChar && !password.Any(c => !char.IsLetterOrDigit(c)))
         {
             throw new InvalidOperationException("Password must contain at least one special character.");
         }

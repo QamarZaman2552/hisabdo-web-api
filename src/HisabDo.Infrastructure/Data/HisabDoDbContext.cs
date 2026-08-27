@@ -1,3 +1,4 @@
+using HisabDo.Domain.Constants;
 using HisabDo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,6 +38,7 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
             entity.Property(c => c.Notes).HasMaxLength(500);
             entity.HasIndex(c => c.UserId);
             entity.HasIndex(c => new { c.UserId, c.Name });
+            entity.HasIndex(c => new { c.UserId, c.Email }).HasFilter("[IsDeleted] = 0");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -54,6 +56,7 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
             entity.Property(t => t.Note).HasMaxLength(500);
             entity.Property(t => t.AttachmentUrl).HasMaxLength(500);
             entity.HasIndex(t => t.UserId);
+            entity.HasIndex(t => new { t.UserId, t.CustomerId });
             entity.HasIndex(t => new { t.UserId, t.TransactionDate });
             entity.HasIndex(t => new { t.UserId, t.Type });
             entity.HasIndex(t => new { t.UserId, t.Type, t.TransactionDate });
@@ -125,28 +128,30 @@ public class HisabDoDbContext(DbContextOptions<HisabDoDbContext> options) : DbCo
                 Email = "demo@hisabdo.com",
                 Phone = "03000000000",
                 PasswordHash = "$2a$11$s8ApQ4Gy1p04rFS0jgd/deaRe9QbZM/4AhyqmgFytPQW6dp5A/lD.",
-                Role = "Admin",
-                CurrencyCode = "PKR",
-                LanguageCode = "en",
+                Role = Roles.Admin,
+                CurrencyCode = Defaults.CurrencyCode,
+                LanguageCode = Defaults.LanguageCode,
                 CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc)
             });
 
         modelBuilder.Entity<Category>().HasData(
-            new Category { Id = 1, UserId = 1, Name = "Sales", IsDefault = true, CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc) },
-            new Category { Id = 2, UserId = 1, Name = "Purchase", IsDefault = true, CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc) },
-            new Category { Id = 3, UserId = 1, Name = "Rent", IsDefault = true, CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc) },
-            new Category { Id = 4, UserId = 1, Name = "Food", IsDefault = true, CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc) },
-            new Category { Id = 5, UserId = 1, Name = "Transport", IsDefault = true, CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc) },
-            new Category { Id = 6, UserId = 1, Name = "Salary", IsDefault = true, CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc) },
-            new Category { Id = 7, UserId = 1, Name = "Others", IsDefault = true, CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc) });
+            Enumerable.Range(0, Defaults.DefaultCategories.Length).Select(i => new Category
+            {
+                Id = i + 1,
+                UserId = 1,
+                Name = Defaults.DefaultCategories[i],
+                IsDefault = true,
+                CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc)
+            }));
 
         modelBuilder.Entity<Setting>().HasData(
             new Setting
             {
                 Id = 1,
                 UserId = 1,
-                CurrencyCode = "PKR",
-                LanguageCode = "en"
+                CurrencyCode = Defaults.CurrencyCode,
+                LanguageCode = Defaults.LanguageCode,
+                CreatedAt = new DateTime(2026, 8, 8, 0, 0, 0, DateTimeKind.Utc)
             });
     }
 }

@@ -34,6 +34,11 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
 
     public async Task<TransactionDto> CreateAsync(int userId, CreateTransactionDto dto)
     {
+        if (dto.Amount <= 0)
+        {
+            throw new InvalidOperationException("Amount must be greater than zero.");
+        }
+
         await EnsureCustomerAndCategoryExistAsync(userId, dto.CustomerId, dto.CategoryId);
         EnsureDateIsNotInFuture(dto.TransactionDate);
 
@@ -54,6 +59,11 @@ public class TransactionService(ITransactionRepository repository) : ITransactio
 
     public async Task<TransactionDto> UpdateAsync(int userId, int id, CreateTransactionDto dto)
     {
+        if (dto.Amount <= 0)
+        {
+            throw new InvalidOperationException("Amount must be greater than zero.");
+        }
+
         var transaction = await repository.GetByIdAsync(userId, id)
             ?? throw new KeyNotFoundException($"No transaction found with ID: {id}");
 

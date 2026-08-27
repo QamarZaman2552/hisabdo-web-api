@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Threading.RateLimiting;
 using HisabDo.API.Middleware;
+using HisabDo.Application.DTOs;
 using HisabDo.Application.Repositories;
 using HisabDo.Application.Services;
 using HisabDo.Infrastructure.Data;
@@ -17,14 +18,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<HisabDoDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration["ConnectionStrings:DefaultConnection"]
+        ?? builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("Missing ConnectionStrings:DefaultConnection. Set via appsettings.json or environment variable.")));
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<UploadSettings>(builder.Configuration.GetSection("Upload"));
+builder.Services.Configure<PasswordPolicySettings>(builder.Configuration.GetSection("PasswordPolicy"));
+
+PasswordPolicy.Configure(builder.Configuration.GetSection("PasswordPolicy").Get<PasswordPolicySettings>() ?? new());
 
 var jwtSecret = builder.Configuration["Jwt:Secret"];
-if (string.IsNullOrEmpty(jwtSecret) || jwtSecret.Length < 32)
+if (string.IsNullOrEmpty(jwtSecret))
 {
-    throw new InvalidOperationException("JWT Secret must be at least 32 characters. Check appsettings.json -> Jwt:Secret.");
+    throw new InvalidOperationException("JWT Secret is not configured. Set Jwt:Secret in appsettings.json or JWT_SECRET environment variable.");
+}
+if (jwtSecret.Length < 32)
+{
+    throw new InvalidOperationException("JWT Secret must be at least 32 characters.");
 }
 if (jwtSecret.Contains("ChangeMeInProduction") || jwtSecret.Contains("SuperSecret"))
 {
@@ -71,20 +83,25 @@ builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
+    var globalLimit = builder.Configuration.GetValue<int>("RateLimiting:GlobalPermitLimit", 100);
+    var globalWindow = builder.Configuration.GetValue<int>("RateLimiting:GlobalWindowMinutes", 1);
+    var authLimit = builder.Configuration.GetValue<int>("RateLimiting:AuthPermitLimit", 10);
+    var authWindow = builder.Configuration.GetValue<int>("RateLimiting:AuthWindowMinutes", 1);
+
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
         RateLimitPartition.GetFixedWindowLimiter(
             context.Connection.RemoteIpAddress?.ToString() ?? "anonymous",
             _ => new FixedWindowRateLimiterOptions
             {
-                PermitLimit = 100,
-                Window = TimeSpan.FromMinutes(1),
+                PermitLimit = globalLimit,
+                Window = TimeSpan.FromMinutes(globalWindow),
                 QueueLimit = 0
             }));
 
     options.AddFixedWindowLimiter("auth", limiter =>
     {
-        limiter.PermitLimit = 10;
-        limiter.Window = TimeSpan.FromMinutes(1);
+        limiter.PermitLimit = authLimit;
+        limiter.Window = TimeSpan.FromMinutes(authWindow);
         limiter.QueueLimit = 0;
     });
 
@@ -105,6 +122,14 @@ builder.Services.AddRateLimiter(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "HisabDo API",
+        Version = "v1",
+        Description = "Khata/Ledger management API for HisabDo mobile app",
+        Contact = new OpenApiContact { Name = "HisabDo Team" }
+    });
+
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",

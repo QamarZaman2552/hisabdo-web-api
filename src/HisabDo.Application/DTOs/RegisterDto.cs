@@ -21,5 +21,7 @@ public class RegisterDto
 
     [Required(ErrorMessage = "Password is required.")]
     [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters.")]
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$",
+        ErrorMessage = "Password must contain uppercase, lowercase, digit, and special character.")]
     public string Password { get; set; } = string.Empty;
 }

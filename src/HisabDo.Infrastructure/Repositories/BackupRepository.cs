@@ -12,22 +12,22 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
     public async Task<BackupFileDto> ExportAsync(int userId)
     {
         var categories = await context.Categories
-            .Where(c => c.UserId == userId && !c.IsDeleted)
+            .Where(c => c.UserId == userId)
             .OrderBy(c => c.Id)
             .ToListAsync();
 
         var customers = await context.Customers
-            .Where(c => c.UserId == userId && !c.IsDeleted)
+            .Where(c => c.UserId == userId)
             .OrderBy(c => c.Id)
             .ToListAsync();
 
         var transactions = await context.Transactions
-            .Where(t => t.UserId == userId && !t.IsDeleted)
+            .Where(t => t.UserId == userId)
             .OrderBy(t => t.Id)
             .ToListAsync();
 
         var setting = await context.Settings
-            .FirstOrDefaultAsync(s => s.UserId == userId && !s.IsDeleted);
+            .FirstOrDefaultAsync(s => s.UserId == userId);
 
         return new BackupFileDto
         {
@@ -75,16 +75,17 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
             {
                 pendingAttachmentUrls = await ClearAllDatabaseAsync(userId);
             }
-        var categoryMap = new Dictionary<int, int>();
+
+            var categoryMap = new Dictionary<int, int>();
         foreach (var dto in data.Categories ?? [])
         {
             var exists = await context.Categories.AnyAsync(c =>
-                c.UserId == userId && !c.IsDeleted && c.Name.ToLower() == dto.Name.ToLower());
+                c.UserId == userId && c.Name.ToLower() == dto.Name.ToLower());
 
             if (exists)
             {
                 var existingId = await context.Categories
-                    .Where(c => c.UserId == userId && !c.IsDeleted && c.Name.ToLower() == dto.Name.ToLower())
+                    .Where(c => c.UserId == userId && c.Name.ToLower() == dto.Name.ToLower())
                     .Select(c => c.Id)
                     .FirstAsync();
                 categoryMap[dto.OriginalId] = existingId;
@@ -110,6 +111,21 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
         var customerMap = new Dictionary<int, int>();
         foreach (var dto in data.Customers ?? [])
         {
+            var existingCustomer = await context.Customers
+                .Where(c => c.UserId == userId && c.Name.ToLower() == dto.Name.ToLower())
+                .Select(c => c.Id)
+                .FirstOrDefaultAsync();
+
+            if (existingCustomer != 0)
+            {
+                if (dto.OriginalId != 0)
+                {
+                    customerMap[dto.OriginalId] = existingCustomer;
+                }
+                result.CustomersSkipped++;
+                continue;
+            }
+
             var customer = new Customer
             {
                 UserId = userId,
@@ -206,20 +222,20 @@ public class BackupRepository(HisabDoDbContext context) : IBackupRepository
     private async Task<List<string>> ClearAllDatabaseAsync(int userId)
     {
         var attachmentUrls = await context.Transactions
-            .Where(t => t.UserId == userId && !t.IsDeleted && t.AttachmentUrl != null)
+            .Where(t => t.UserId == userId && t.AttachmentUrl != null)
             .Select(t => t.AttachmentUrl!)
             .ToListAsync();
 
         await context.Transactions
-            .Where(t => t.UserId == userId && !t.IsDeleted)
+            .Where(t => t.UserId == userId)
             .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsDeleted, true));
 
         await context.Customers
-            .Where(c => c.UserId == userId && !c.IsDeleted)
+            .Where(c => c.UserId == userId)
             .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsDeleted, true));
 
         await context.Categories
-            .Where(c => c.UserId == userId && !c.IsDeleted)
+            .Where(c => c.UserId == userId)
             .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsDeleted, true));
 
         return attachmentUrls;

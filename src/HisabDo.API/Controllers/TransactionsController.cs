@@ -3,13 +3,17 @@ using HisabDo.Application.DTOs;
 using HisabDo.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace HisabDo.API.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
 [Authorize]
-public class TransactionsController(ITransactionService transactionService) : ControllerBase
+public class TransactionsController(
+    ITransactionService transactionService,
+    IOptions<UploadSettings> uploadOptions,
+    ILogger<TransactionsController> logger) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<PaginatedResult<TransactionDto>>> GetAllTransactions([FromQuery] TransactionFilterDto filter)
@@ -72,15 +76,22 @@ public class TransactionsController(ITransactionService transactionService) : Co
                 detail: "No file uploaded.", type: "https://tools.ietf.org/html/rfc9110#section-15.5.1");
         }
 
-        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".pdf", ".gif" };
+        var settings = uploadOptions.Value;
         var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-        if (!allowedExtensions.Contains(ext))
+        if (!settings.AllowedExtensions.Contains(ext))
         {
             return Problem(statusCode: StatusCodes.Status400BadRequest, title: "Bad request",
-                detail: "Only jpg, jpeg, png, gif, and pdf files are allowed.", type: "https://tools.ietf.org/html/rfc9110#section-15.5.1");
+                detail: $"Only {string.Join(", ", settings.AllowedExtensions)} files are allowed.", type: "https://tools.ietf.org/html/rfc9110#section-15.5.1");
         }
 
-        var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+        var allowedContentTypes = new[] { "image/jpeg", "image/png", "image/gif", "application/pdf" };
+        if (!string.IsNullOrEmpty(file.ContentType) && !allowedContentTypes.Contains(file.ContentType.ToLowerInvariant()))
+        {
+            return Problem(statusCode: StatusCodes.Status400BadRequest, title: "Bad request",
+                detail: "File content type does not match the file extension.", type: "https://tools.ietf.org/html/rfc9110#section-15.5.1");
+        }
+
+        var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), settings.Directory);
         Directory.CreateDirectory(uploadsDir);
 
         var fileName = $"{Guid.NewGuid()}{ext}";
@@ -106,8 +117,18 @@ public class TransactionsController(ITransactionService transactionService) : Co
 
         if (!string.IsNullOrEmpty(existingUrl))
         {
-            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingUrl.TrimStart('/'));
-            if (System.IO.File.Exists(oldFilePath)) System.IO.File.Delete(oldFilePath);
+            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), settings.Directory, existingUrl.TrimStart('/'));
+            if (System.IO.File.Exists(oldFilePath))
+            {
+                try
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogWarning(ex, "Failed to delete old attachment file: {Path}", oldFilePath);
+                }
+            }
         }
 
         return Ok(new { attachmentUrl = $"/uploads/{fileName}", fileName });

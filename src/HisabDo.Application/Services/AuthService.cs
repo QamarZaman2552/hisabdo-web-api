@@ -1,5 +1,6 @@
 ﻿using HisabDo.Application.DTOs;
 using HisabDo.Application.Repositories;
+using HisabDo.Domain.Constants;
 using HisabDo.Domain.Entities;
 
 namespace HisabDo.Application.Services;
@@ -31,17 +32,15 @@ public class AuthService(
             Email = email,
             Phone = dto.Phone,
             PasswordHash = passwordHasher.Hash(dto.Password),
-            Role = "User",
-            CurrencyCode = "PKR",
-            LanguageCode = "en"
+            Role = Roles.User,
+            CurrencyCode = Defaults.CurrencyCode,
+            LanguageCode = Defaults.LanguageCode
         };
 
         await repository.AddAsync(user);
 
-        var defaultCategories = new[]
-        {
-            "Sales", "Purchase", "Rent", "Food", "Transport", "Salary", "Others"
-        }.Select(name => new Category
+        var defaultCategories = Defaults.DefaultCategories
+            .Select(name => new Category
         {
             UserId = user.Id,
             Name = name,

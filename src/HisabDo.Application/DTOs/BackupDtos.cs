@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using HisabDo.Domain.Constants;
 
 namespace HisabDo.Application.DTOs;
 
@@ -14,8 +15,8 @@ public class BackupFileDto
 
 public class BackupSettingsDto
 {
-    public string CurrencyCode { get; set; } = "PKR";
-    public string LanguageCode { get; set; } = "en";
+    public string CurrencyCode { get; set; } = Defaults.CurrencyCode;
+    public string LanguageCode { get; set; } = Defaults.LanguageCode;
 }
 
 public class BackupCategoryDto
@@ -60,6 +61,7 @@ public class RestoreResultDto
     public int CategoriesImported { get; set; }
     public int CategoriesSkipped { get; set; }
     public int CustomersImported { get; set; }
+    public int CustomersSkipped { get; set; }
     public int TransactionsImported { get; set; }
     public int TransactionsSkipped { get; set; }
 }

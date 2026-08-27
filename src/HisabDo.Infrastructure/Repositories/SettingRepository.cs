@@ -24,7 +24,14 @@ public class SettingRepository(HisabDoDbContext context) : ISettingRepository
             context.Settings.Update(setting);
         }
 
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. Please try again.");
+        }
         return setting;
     }
 
@@ -32,6 +39,13 @@ public class SettingRepository(HisabDoDbContext context) : ISettingRepository
     {
         setting.IsDeleted = true;
         context.Settings.Update(setting);
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new InvalidOperationException("A concurrency error occurred. Please try again.");
+        }
     }
 }

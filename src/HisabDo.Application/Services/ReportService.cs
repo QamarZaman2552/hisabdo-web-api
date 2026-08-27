@@ -19,6 +19,7 @@ public class ReportService(IReportRepository repository) : IReportService
         var monthStart = period?.ToLower() switch
         {
             "week" => DateTime.UtcNow.AddDays(-7),
+            "month" => new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc),
             "3months" => DateTime.UtcNow.AddMonths(-3),
             "year" => DateTime.UtcNow.AddYears(-1),
             _ => new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc)

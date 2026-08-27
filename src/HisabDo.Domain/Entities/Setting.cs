@@ -1,12 +1,13 @@
+using HisabDo.Domain.Common;
+using HisabDo.Domain.Constants;
+
 namespace HisabDo.Domain.Entities;
 
-public class Setting
+public class Setting : BaseEntity
 {
-    public int Id { get; set; }
     public int UserId { get; set; }
-    public string CurrencyCode { get; set; } = "PKR";
-    public string LanguageCode { get; set; } = "en";
-    public bool IsDeleted { get; set; }
+    public string CurrencyCode { get; set; } = Defaults.CurrencyCode;
+    public string LanguageCode { get; set; } = Defaults.LanguageCode;
 
     public User? User { get; set; }
 }

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,11 @@ public class ExceptionHandlingMiddleware(
         {
             logger.LogWarning(ex, "Requested resource was not found.");
             await WriteProblemAsync(context, StatusCodes.Status404NotFound, "Resource not found", ex.Message, "https://tools.ietf.org/html/rfc9110#section-15.5.5");
+        }
+        catch (ValidationException ex)
+        {
+            logger.LogWarning(ex, "Validation failed.");
+            await WriteProblemAsync(context, StatusCodes.Status400BadRequest, "Validation error", ex.Message, "https://tools.ietf.org/html/rfc9110#section-15.5.1");
         }
         catch (InvalidOperationException ex)
         {
