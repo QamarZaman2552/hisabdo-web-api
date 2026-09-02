@@ -1,4 +1,4 @@
-# HisabDo Web API — Final Video Script (Verified)
+# HisabDo Web API — Video Script (13 APIs Only)
 
 ---
 
@@ -57,9 +57,7 @@ src/
 **Connection explain karo:**
 
 ```
-"Ab main batata hoon ke ye layers kaise kaam karti hain:
-
-Jab koi user request bhejta hai — jaise POST /transactions:
+"Jab koi user request bhejta hai — jaise POST /transactions:
 
 1. Pehle Controller aata hai (API Layer)
    → Ye request ko receive karta hai
@@ -72,22 +70,16 @@ Jab koi user request bhejta hai — jaise POST /transactions:
 
 3. Phir Repository aata hai (Infrastructure Layer)
    → Database se data leta hai ya save karta hai
-   → DbContext use karta hai
 
-4. Domain Layer — ye sabse neeche hai
-   → Sirf entities aur types define karta hai
-   → Kisi pe depend nahi karta
+4. Domain Layer — sabse neeche hai
+   → Sirf entities define karta hai
 
-Dependency flow ye hai:
-API → Application → Domain ← Infrastructure
-
-Ye isliye hai ke agar kal SQL Server MongoDB mein change karna ho,
-to sirf Infrastructure layer change hogi — baqi sab same rahega."
+Dependency: API → Application → Domain ← Infrastructure"
 ```
 
 ---
 
-## 3. API DEMO (3 minutes)
+## 3. API DEMO (13 APIs)
 
 **Server start karo:**
 ```
@@ -98,84 +90,54 @@ dotnet run --project src\HisabDo.API
 
 ---
 
-### Step 1: Login
+### API 1: Login
 ```
 POST /api/v1/auth/login
-
 {
   "email": "demo@hisabdo.com",
   "password": "Demo@123"
 }
-
-→ Response: 200 OK
-→ Token milega — copy karo
-→ Swagger mein "Authorize" button pe jao
-→ "Bearer <token>" daalo → Authorize karo
+→ 200 OK → Token copy karo → Authorize mein daalo
 ```
 
-### Step 2: Get Profile
+### API 2: Get Profile
 ```
 GET /api/v1/auth/me
-
-→ Response: 200 OK
+→ 200 OK
 {
   "id": 1,
   "fullName": "Demo User",
   "businessName": "Demo Shop",
   "email": "demo@hisabdo.com",
-  "phone": "03000000000",
   "role": "Admin",
   "currencyCode": "PKR",
   "languageCode": "en"
 }
 ```
 
-### Step 3: Get Categories
+### API 3: Get Categories
 ```
 GET /api/v1/categories?page=1&pageSize=50
-
-→ Response: 200 OK
-{
-  "items": [
-    { "id": 1, "name": "Sales" },
-    { "id": 2, "name": "Purchase" },
-    { "id": 3, "name": "Rent" },
-    { "id": 4, "name": "Food" },
-    { "id": 5, "name": "Transport" },
-    { "id": 6, "name": "Salary" },
-    { "id": 7, "name": "Others" }
-  ],
-  "totalCount": 7
-}
-
-"Bol ke dikhao: Register karte hi 7 categories automatic create ho jati hain"
+→ 200 OK → 7 categories:
+  id=1 Sales, id=2 Purchase, id=3 Rent,
+  id=4 Food, id=5 Transport, id=6 Salary, id=7 Others
 ```
 
-### Step 4: Create Customer
+### API 4: Create Customer
 ```
 POST /api/v1/customers
-
 {
   "name": "Ahmed Traders",
   "phone": "03009876543",
   "email": "ahmed@test.com",
   "notes": "Wholesale supplier"
 }
-
-→ Response: 200 OK
-{
-  "id": 1,
-  "name": "Ahmed Traders",
-  "phone": "03009876543",
-  "email": "ahmed@test.com",
-  "notes": "Wholesale supplier"
-}
+→ 200 OK → id: 1
 ```
 
-### Step 5: Create Receivable (Income)
+### API 5: Create Receivable (Income)
 ```
 POST /api/v1/transactions
-
 {
   "customerId": 1,
   "categoryId": 1,
@@ -184,16 +146,13 @@ POST /api/v1/transactions
   "note": "Widget order payment",
   "transactionDate": "2026-08-28T10:00:00Z"
 }
-
-→ categoryId: 1 = Sales
-→ type: 1 = Receivable (income)
-→ Response: 200 OK
+→ categoryId: 1 = Sales, type: 1 = Receivable
+→ 200 OK
 ```
 
-### Step 6: Create Payable (Expense)
+### API 6: Create Payable (Expense)
 ```
 POST /api/v1/transactions
-
 {
   "customerId": 1,
   "categoryId": 3,
@@ -202,278 +161,94 @@ POST /api/v1/transactions
   "note": "Office rent August",
   "transactionDate": "2026-08-28T10:00:00Z"
 }
-
-→ categoryId: 3 = Rent
-→ type: 2 = Payable (expense)
-→ Response: 200 OK
+→ categoryId: 3 = Rent, type: 2 = Payable
+→ 200 OK
 ```
 
-### Step 7: Get All Transactions
+### API 7: Get All Transactions
 ```
 GET /api/v1/transactions?page=1&pageSize=50
-
-→ Response: 200 OK
-{
-  "items": [
-    { "id": 1, "amount": 5000, "type": 1, "note": "Widget order payment" },
-    { "id": 2, "amount": 2000, "type": 2, "note": "Office rent August" }
-  ],
-  "totalCount": 2
-}
+→ 200 OK → 2 transactions:
+  id=1 amount=5000 type=1 "Widget order payment"
+  id=2 amount=2000 type=2 "Office rent August"
 ```
 
-### Step 8: Search Transactions
+### API 8: Search Transactions
 ```
 GET /api/v1/transactions?Search=rent
-
-→ Response: 200 OK
-{
-  "items": [
-    { "id": 2, "amount": 2000, "type": 2, "note": "Office rent August" }
-  ],
-  "totalCount": 1
-}
+→ 200 OK → 1 result:
+  id=2 amount=2000 type=2 "Office rent August"
 ```
 
-### Step 9: Filter by Type
+### API 9: Filter by Type
 ```
 GET /api/v1/transactions?type=1
-
-→ Sirf Receivable (income) dikhenge
-→ Response: 200 OK
-{
-  "items": [
-    { "id": 1, "amount": 5000, "type": 1, "note": "Widget order payment" }
-  ],
-  "totalCount": 1
-}
+→ 200 OK → 1 receivable:
+  id=1 amount=5000 type=1 "Widget order payment"
 ```
 
-### Step 10: Reports Summary
+### API 10: Reports Summary
 ```
 GET /api/v1/reports/summary?period=month
-
-→ Response: 200 OK
+→ 200 OK
 {
   "totalReceivable": 5000,
   "totalPayable": 2000,
   "netReceivable": 3000,
-  "transactionCount": 2,
-  "period": "month"
+  "transactionCount": 2
 }
-
-"Bol ke dikhao: Ye dashboard pe monthly overview dikhaata hai"
 ```
 
-### Step 11: Reports By Category
+### API 11: Reports By Category
 ```
 GET /api/v1/reports/by-category
-
-→ Response: 200 OK
+→ 200 OK
 [
-  { "categoryName": "Sales", "totalAmount": 5000, "type": 1 },
-  { "categoryName": "Rent", "totalAmount": 2000, "type": 2 }
+  { "categoryName": "Sales", "totalAmount": 5000 },
+  { "categoryName": "Rent", "totalAmount": 2000 }
 ]
 ```
 
-### Step 12: Notifications
+### API 12: Notifications
 ```
 GET /api/v1/reports/notifications
-
-→ Response: 200 OK
+→ 200 OK
 {
-  "today": { "transactionCount": 2, "totalAmount": 7000 },
-  "thisWeek": { "transactionCount": 2, "totalAmount": 7000 }
+  "today": { "transactionCount": 2 },
+  "thisWeek": { "transactionCount": 2 }
 }
 ```
 
-### Step 13: Backup
+### API 13: Backup
 ```
 GET /api/v1/data/backup
-
-→ Response: 200 OK
-{
-  "exportedAt": "2026-08-28T10:00:00Z",
-  "users": [...],
-  "categories": [...7 items],
-  "customers": [...1 item],
-  "transactions": [...2 items],
-  "settings": [...]
-}
-
-"Bol ke dikhao: Ye user apna saara data JSON format mein download kar sakta hai"
+→ 200 OK → Full JSON export:
+  7 categories, 1 customer, 2 transactions
 ```
 
 ---
 
-## 4. SECURITY DEMO (1 minute)
+## 4. SECURITY (30 seconds)
 
-### Test 1: No Token → 401
 ```
-// Logout karo (Authorize button se token hatao)
-GET /api/v1/auth/me (bina token ke)
+"Bol ke dikhao:
 
-→ Response: 401 Unauthorized
-```
-
-### Test 2: Invalid Token → 401
-```
-GET /api/v1/auth/me
-Header: Authorization: Bearer abc123invalid
-
-→ Response: 401 Unauthorized
-```
-
-### Test 3: BOLA — User A can't access User B
-```
-// Naya user register karo
-POST /api/v1/auth/register
-{
-  "fullName": "User B",
-  "businessName": "B Shop",
-  "email": "userb@test.com",
-  "phone": "03001111111",
-  "password": "Admin@123"
-}
-
-// Uska token lo aur transaction banao
-POST /api/v1/transactions (User B ke token se)
-{
-  "customerId": 2,
-  "categoryId": 8,
-  "type": 1,
-  "amount": 3000,
-  "note": "User B ka transaction",
-  "transactionDate": "2026-08-28T10:00:00Z"
-}
-
-// Ab demo user ke token se User B ka transaction access karo
-GET /api/v1/transactions/3 (Demo User ke token se)
-
-→ Response: 404 Not Found
-"Bol ke dikhao: User A ko User B ka data nahi dikhta — ye BOLA protection hai"
-```
-
-### Test 4: Rate Limiting → 429
-```
-// Login ko 10 baar jaldi jaldi karo
-POST /api/v1/auth/login (11th time)
-
-→ Response: 429 Too Many Requests
-```
-
-### Test 5: Admin Only → 403
-```
-// User B ke token se admin endpoint access karo
-GET /api/v1/admin/users (User B ke token se)
-
-→ Response: 403 Forbidden
+1. No token → 401 Unauthorized
+2. User A ka token → User B ka data nahi dikhta (BOLA protection)
+3. Login 10 baar → 429 Rate Limiting
+4. User role → Admin endpoint nahi khulta (403)"
 ```
 
 ---
 
-## 5. TESTING EVIDENCE (30 seconds)
-
-```
-"Ye SQA handover document hai — ismein saari testing ka record hai.
-
-39 APIs test huin, 53 test cases execute huaye:
-- 49 Passed
-- 4 Deferred (Backup/Restore partial, CORS, Swagger docs)
-
-Zero data leaks mile hain — User A ka data User B ko nahi dikha.
-
-SQA Lead ne GREEN SIGNAL diya hai deployment ke liye."
-```
-
----
-
-## 6. ALL 33 API ENDPOINTS
-
-```
-AUTH (6):
-  POST   /api/v1/auth/register
-  POST   /api/v1/auth/login
-  GET    /api/v1/auth/me
-  PUT    /api/v1/auth/me
-  POST   /api/v1/auth/change-password
-  DELETE /api/v1/auth/account
-
-CATEGORIES (6):
-  GET    /api/v1/categories
-  GET    /api/v1/categories/{id}
-  POST   /api/v1/categories
-  PUT    /api/v1/categories/{id}
-  DELETE /api/v1/categories/{id}
-  GET    /api/v1/categories/{id}/transactions
-
-CUSTOMERS (5):
-  GET    /api/v1/customers
-  GET    /api/v1/customers/{id}
-  POST   /api/v1/customers
-  PUT    /api/v1/customers/{id}
-  DELETE /api/v1/customers/{id}
-
-TRANSACTIONS (7):
-  GET    /api/v1/transactions
-  GET    /api/v1/transactions/{id}
-  POST   /api/v1/transactions
-  PUT    /api/v1/transactions/{id}
-  DELETE /api/v1/transactions/{id}
-  POST   /api/v1/transactions/{id}/attachment
-  GET    /api/v1/categories/{categoryId}/transactions
-
-REPORTS (3):
-  GET    /api/v1/reports/summary
-  GET    /api/v1/reports/by-category
-  GET    /api/v1/reports/notifications
-
-SETTINGS (3):
-  GET    /api/v1/settings
-  PUT    /api/v1/settings
-  DELETE /api/v1/settings
-
-ADMIN (1):
-  GET    /api/v1/admin/users
-
-DATA (3):
-  GET    /api/v1/data/backup
-  POST   /api/v1/data/restore
-  DELETE /api/v1/data/all
-```
-
----
-
-## 7. ALL 12 SECURITY FEATURES
-
-```
-1.  JWT Bearer Authentication — HS256, 24h expiry
-2.  BCrypt Password Hashing — plain text kabhi store nahi hota
-3.  Role-Based Authorization — Admin/User roles
-4.  BOLA Prevention — ownership verify hota hai har endpoint pe
-5.  Global Query Filter — soft-deleted data dikhta nahi
-6.  Rate Limiting — 100/min global, 10/min auth endpoints
-7.  CORS Policy — production mein sirf allowed domains
-8.  Upload Security — 10MB limit, sirf allowed extensions
-9.  RFC 7807 Error Handling — proper error responses
-10. Password Policy — min 8, uppercase, lowercase, digit, special char
-11. Soft Delete — data permanently delete nahi hota
-12. Cascade Delete — account delete pe saara data cleanup
-```
-
----
-
-## 8. CONCLUSION (30 seconds)
+## 5. CONCLUSION (30 seconds)
 
 ```
 "To ye tha HisabDo Web API ka complete demo.
 
-Summary:
 - 33 API endpoints across 8 modules
 - 12 security features
 - Clean Architecture with 108 C# files
-- 8 database migrations
-- 90+ test scenarios
 - SQA green signal for deployment
 
 Code pushed to:
@@ -485,10 +260,10 @@ Thank you!"
 
 ---
 
-## Quick Reference (Video record karte waqt dekho)
+## Quick Reference
 
-| Step | Method | Endpoint | Body |
-|------|--------|----------|------|
+| # | Method | Endpoint | Body |
+|---|--------|----------|------|
 | 1 | POST | `/auth/login` | `{"email":"demo@hisabdo.com","password":"Demo@123"}` |
 | 2 | GET | `/auth/me` | — |
 | 3 | GET | `/categories?page=1&pageSize=50` | — |
@@ -502,26 +277,3 @@ Thank you!"
 | 11 | GET | `/reports/by-category` | — |
 | 12 | GET | `/reports/notifications` | — |
 | 13 | GET | `/data/backup` | — |
-
----
-
-## Category ID Reference
-
-| ID | Name | Use in Transaction |
-|----|------|-------------------|
-| 1 | Sales | categoryId: 1 (Receivable) |
-| 2 | Purchase | categoryId: 2 (Payable) |
-| 3 | Rent | categoryId: 3 (Payable) |
-| 4 | Food | categoryId: 4 (Payable) |
-| 5 | Transport | categoryId: 5 (Payable) |
-| 6 | Salary | categoryId: 6 (Payable) |
-| 7 | Others | categoryId: 7 (Either) |
-
----
-
-## Transaction Type Reference
-
-| Type | Value | Meaning |
-|------|-------|---------|
-| Receivable | 1 | Income (paise aaye) |
-| Payable | 2 | Expense (paise gaye) |
